@@ -15,7 +15,7 @@ public class Main {
         //word to find and count occurrences
         String wordToFind = "storia";
         //dept to search, depth = 0 to count only entrypoint
-        int depth = 1;
+        int depth = 0;
 
         //Report report  = RecursiveCounter.getWordOccurrences(URL, wordToFind, depth);
         Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);

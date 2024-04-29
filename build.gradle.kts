@@ -17,6 +17,8 @@ dependencies {
     implementation("io.vertx:vertx-core:4.5.7")
     implementation("io.vertx:vertx-web:4.5.7")
     implementation("io.vertx:vertx-web-client:4.5.7")
+
+    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
 }
 
 tasks.test {

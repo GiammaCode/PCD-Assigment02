@@ -1,6 +1,8 @@
 package pcd.part2;
 
-import pcd.virtualThread.CrawlerVT;
+
+
+import pcd.part2.virtualThread.CrawlerVT;
 
 import java.io.IOException;
 
@@ -13,7 +15,7 @@ public class Main {
         //word to find and count occurrences
         String wordToFind = "storia";
         //dept to search, depth = 0 to count only entrypoint
-        int depth = 0;
+        int depth = 1;
 
         //Report report  = RecursiveCounter.getWordOccurrences(URL, wordToFind, depth);
         Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);

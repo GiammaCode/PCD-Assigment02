@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f735613-5cb8-4ddf-8a5d-4f4beacc47ce" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/CrawlerVT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/CrawlerVT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/FindSubLinksTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/FindSubLinksTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/WordCountTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/WordCountTask.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,7 +25,27 @@
       <ProjectState />
     </projectState>
   </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -36,21 +60,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/giamm/Desktop/PCD-Assigment02/src/main/java/pcd/part2/virtualThread",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;pasoBranch&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/lucap/Desktop/Università/Concurrent_and_dist_PROG/PCD-Assigment02&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\giamm\Desktop\PCD-Assigment02\src\main\java\pcd\part2\virtualThread" />
@@ -119,6 +143,8 @@
       <updated>1714312190574</updated>
       <workItem from="1714312192078" duration="1035000" />
       <workItem from="1714388946797" duration="2042000" />
+      <workItem from="1714391900302" duration="5252000" />
+      <workItem from="1714484722369" duration="4191000" />
     </task>
     <servers />
   </component>

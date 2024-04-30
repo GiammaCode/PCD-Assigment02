@@ -21,7 +21,7 @@ public class CrawlerVT {
 
         var list = new ArrayList<Thread>();
         for(String subLink : links){
-            Thread vt = Thread.ofVirtual().unstarted(new WordCountTask(subLink, word, depth, result));
+            Thread vt = Thread.ofVirtual().unstarted(new WordCountTask(subLink, word, result));
             vt.start();
             list.add(vt);
         }

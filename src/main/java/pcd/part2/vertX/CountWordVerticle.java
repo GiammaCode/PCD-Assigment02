@@ -1,4 +1,6 @@
-package pcd.part2.virtualThread;
+package pcd.part2.vertX;
+
+import io.vertx.core.AbstractVerticle;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,22 +8,20 @@ import java.net.URI;
 import java.net.URLConnection;
 import java.util.HashMap;
 
-public class WordCountTask implements Runnable {
-    private String entryPoint;
-    private String word;
-    private HashMap<String, Integer> result;
+public class CountWordVerticle extends AbstractVerticle {
+    String entryPoint;
+    String word;
+    HashMap<String, Integer> result;
 
-    public WordCountTask(String entryPoint, String word, HashMap<String, Integer> result) {
+    public CountWordVerticle(String entryPoint, String word, HashMap<String, Integer> result) {
         this.entryPoint = entryPoint;
         this.word = word;
         this.result = result;
     }
 
-    @Override
-    public void run() {
+    public void start(){
         int wordCount = 0;
         String line;
-
         try {
             URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -32,14 +32,13 @@ public class WordCountTask implements Runnable {
                     wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
                 }
             }
-
             bufferedReader.close();
         } catch (Exception e) {
             System.out.println("[WORD COUNT TASK] impossible to connect :" + entryPoint);
             //e.printStackTrace();
         }
-
         result.put(entryPoint, wordCount);
-
     }
+
 }
+

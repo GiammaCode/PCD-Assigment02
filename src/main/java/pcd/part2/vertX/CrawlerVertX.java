@@ -17,7 +17,7 @@ public class CrawlerVertX {
         di concorrenza come la sincronizzazione o i lock tra thread.
         * */
         Vertx vertex = Vertx.vertx();
-        vertex.deployVerticle()
+        //vertex.deployVerticle()
         return new Report(word, result);
     }
 }

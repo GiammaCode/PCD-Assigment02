@@ -7,17 +7,21 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        String URL = "https://it.wikipedia.org/wiki/Ferrari";
-        String wordToFind = "ferrari";
+        String URL = "https://www.gazzetta.it/";
+        String wordToFind = "calcio";
         //depth = 0 to analyze only entrypoint page
+        //depth = 2 ti bloccano
         int depth = 1;
 
+        long startTime = System.currentTimeMillis();
         //Report report  = RecursiveCounter.getWordOccurrences(URL, wordToFind, depth);
         Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
+        System.out.println("[TIME OF EXECUTION] : " + (System.currentTimeMillis()-startTime) + "Milliseconds");
 
         //Decomment to get a report.txt
         //report.getTxtReport();
         report.logResult();
+
 
     }
 }

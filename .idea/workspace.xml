@@ -7,9 +7,8 @@
     <list default="true" id="2f735613-5cb8-4ddf-8a5d-4f4beacc47ce" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/CrawlerVT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/CrawlerVT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/WordCountTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/WordCountTask.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +152,7 @@
       <workItem from="1714312192078" duration="1035000" />
       <workItem from="1714388946797" duration="9000000" />
       <workItem from="1714461542755" duration="4343000" />
-      <workItem from="1714480006031" duration="3134000" />
+      <workItem from="1714480006031" duration="10852000" />
     </task>
     <servers />
   </component>

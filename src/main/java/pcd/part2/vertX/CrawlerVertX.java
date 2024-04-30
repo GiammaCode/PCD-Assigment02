@@ -1,5 +1,6 @@
 package pcd.part2.vertX;
 
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import pcd.part2.Report;
 import java.util.HashMap;
@@ -16,12 +17,13 @@ public class CrawlerVertX {
         Tradotto in parole semplici, si riesce a creare applicazioni multi-threaded senza dover gestire problematiche
         di concorrenza come la sincronizzazione o i lock tra thread.
         * */
-        Vertx vertex = Vertx.vertx();
+        Vertx vertx = Vertx.vertx();
+
         CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, result);
-        vertex.deployVerticle(verticle);
+        vertx.deployVerticle(verticle);
+        System.out.println("a");
 
-        //vertex.undeploy(verticle.deploymentID());
-
+        System.out.println(result);
         return new Report(word, result);
     }
 

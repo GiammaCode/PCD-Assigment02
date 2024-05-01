@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URLConnection;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,50 +32,43 @@ public class RecursiveWordCountTask implements Runnable {
     public void run() {
         int wordCount = 0;
         String line;
-        //creo documento dove inserire html
         StringBuilder content = new StringBuilder();
-
         try {
-            URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();
+            //open connection
+            URLConnection urlConnection = new URI(this.entryPoint).toURL().openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
+            //count word occurrence
             while ((line = bufferedReader.readLine()) != null) {
-                //aggiungo linea da buffer a documento
-                content.append(line + "\n");
-
-                //conto parole
+                content.append(line).append("\n");
                 String[] words = line.split(" ");
                 for (String w : words) {
-                    wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
+                    wordCount = w.toLowerCase().equals(this.word) ? wordCount + 1 : wordCount;
                 }
-
             }
             bufferedReader.close();
-            result.put(entryPoint, wordCount);
-
-            //ho contato le ricorrenze cerco i sottolink e li addo in una lista
-            Matcher m = this.pattern.matcher(content);
-            while (m.find()) {
-                this.subLinks.add(m.group());
-            }
-
-            //ho una lista di sottolink e se depth > 1 entro nella ricorrenza
-            if (depth > 0) {
+            this.result.put(this.entryPoint, wordCount);
+            //start recursive part
+            if (this.depth > 0) {
+                //search sublinks
+                Matcher m = this.pattern.matcher(content);
+                while(m.find()) {
+                    this.subLinks.add(m.group());
+                }
                 this.depth--;
-                //System.out.println(depth);
-                for (String link : subLinks) {
-                    Thread vt = Thread.ofVirtual().unstarted(new RecursiveWordCountTask(link, word, this.depth, result, pattern));
-                    threads.add(vt);
+                for (String sublink : subLinks) {
+                    Thread vt = Thread.ofVirtual()
+                            .unstarted(new RecursiveWordCountTask(sublink, this.word, this.depth, this.result, this.pattern));
+                    this.threads.add(vt);
                     vt.start();
                 }
-                for (Thread thread : threads) {
+                for (Thread thread : this.threads) {
                     thread.join();
                 }
             }
 
         }
         catch (Exception e) {
-            System.out.println("[" + Thread.currentThread() + "]" + " connection failed: " + entryPoint);
+            System.out.println("[" + Thread.currentThread() + "]" + " connection failed: " + this.entryPoint);
         }
     }
 }

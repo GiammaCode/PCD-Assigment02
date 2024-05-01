@@ -21,5 +21,4 @@ public class CrawlerVT {
 
         return new Report(word, result);
     }
-
 }

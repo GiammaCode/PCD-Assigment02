@@ -25,6 +25,7 @@ public class CountWordVerticle extends AbstractVerticle {
         String line;
 
         Future<Integer> future = this.getVertx().executeBlocking(()-> {
+            result.put("prova", 5);
             return 50;
         });
 

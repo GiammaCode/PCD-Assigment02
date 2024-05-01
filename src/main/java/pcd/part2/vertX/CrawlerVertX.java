@@ -21,9 +21,9 @@ public class CrawlerVertX {
 
         CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, result);
         vertx.deployVerticle(verticle);
-        System.out.println("a");
 
-        System.out.println(result);
+
+
         return new Report(word, result);
     }
 

@@ -22,24 +22,4 @@ public class CrawlerVT {
         return new Report(word, result);
     }
 
-    private static List<String> getSubLinks(List<String> links) throws InterruptedException {
-        String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
-        Pattern pattern = Pattern.compile(regex);
-        List<String> sublinks = new LinkedList<>();
-        System.out.println("[analyze new list of web page]");
-
-        var list = new ArrayList<Thread>();
-        for (String l : links) {
-            Thread vt = Thread.ofVirtual().unstarted(new FindSubLinksTask(l, sublinks, pattern));
-            vt.start();
-            list.add(vt);
-        }
-        list.forEach(t -> {
-            try {
-                t.join();
-            } catch (Exception ex) {};
-        });
-
-        return sublinks;
-    }
 }

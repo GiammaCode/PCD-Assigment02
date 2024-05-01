@@ -21,8 +21,8 @@ public class Report {
      * print the result of word research
      * */
     public void logResult() {
-        System.out.println("word to find: " + word);
-        System.out.println("number of web page analyzed: " + result.size());
+        System.out.println("[WORD TO FIND] : " + word);
+        System.out.println("[PAGE ANALYZED] : " + result.size());
         for (var entry : result.entrySet()) {
             System.out.println(entry.getKey() + "   ==> " + entry.getValue());
         }
@@ -35,7 +35,7 @@ public class Report {
      * */
     public void getTxtReport() throws IOException {
         FileWriter report = new FileWriter("pcd-2023-2024-master/app/src/main/java/pcd/part2/Report.txt");
-        report.write("word to find: " + word);
+        report.write("[WORD TO FIND] : " + word);
         for (var entry : result.entrySet()) {
             report.write(entry.getKey() + " ==> " + entry.getValue() + "\n" );
         }

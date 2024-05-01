@@ -24,7 +24,6 @@ public class Main {
 
         //Decomment to get a report.txt
         //report.getTxtReport();
-
         report.logResult();
 
 

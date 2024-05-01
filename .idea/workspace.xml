@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f735613-5cb8-4ddf-8a5d-4f4beacc47ce" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/CrawlerVT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/CrawlerVT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/FindSubLinksTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/FindSubLinksTask.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/WordCountTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/WordCountTask.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -9,10 +9,10 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        String URL = "https://finagricola.it/il-fresco/pomodori/pomodoro-ciliegino/";
-        String wordToFind = "pomodoro";
+        String URL = "https://www.akwabaforli.com/";
+        String wordToFind = "il";
         //depth = 0 to analyze only entrypoint page
-        int depth = 2;
+        int depth = 1;
 
         //Vertx  vertx = Vertx.vertx();
 

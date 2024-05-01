@@ -32,48 +32,54 @@ public class WordCountTask implements Runnable {
     @Override
     public void run() {
         int wordCount = 0;
+        //pulisco lista sottolink
         subLinks.clear();
         String line;
+        //creo documento dove inserire html
         StringBuilder content = new StringBuilder();
+
         try {
             URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 
             while ((line = bufferedReader.readLine()) != null) {
+                //aggiungo linea da buffer a documento
                 content.append(line + "\n");
+
+                //conto parole
                 String[] words = line.split(" ");
                 for (String w : words) {
                     wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
                 }
+
             }
-
             bufferedReader.close();
+            result.put(entryPoint, wordCount);
 
+            //ho contato le ricorrenze cerco i sottolink e li addo in una lista
             Matcher m = this.pattern.matcher(content);
             while (m.find()) {
                 this.subLinks.add(m.group());
             }
 
+            //ho una lista di sottolink e se depth > 1 entro nella ricorrenza
             if (depth > 0) {
-                this.depth = depth - 1;
+                this.depth--;
                 System.out.println(depth);
                 for (String link : subLinks) {
                     Thread vt = Thread.ofVirtual().unstarted(new WordCountTask(link, word, this.depth, result, pattern));
                     threads.add(vt);
                     vt.start();
                 }
-
-                result.put(entryPoint, wordCount);
-
                 for (Thread thread : threads) {
-
                     thread.join();
-
                 }
-
             }
-        } catch (Exception e) {
+
+        }
+        catch (Exception e) {
             System.out.println("Impossibile connettersi a " + entryPoint);
         }
+
     }
 }

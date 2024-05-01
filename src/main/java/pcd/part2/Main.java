@@ -12,15 +12,15 @@ public class Main {
         String wordToFind = "pomodoro";
         //depth = 0 to analyze only entrypoint page
         //depth = 2 ti bloccano
-        int depth = 0;
+        int depth = 1;
 
         long startTime = System.currentTimeMillis();
 
         //Report report  = RecursiveCounter.getWordOccurrences(URL, wordToFind, depth);
-        //Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
-        Report report = CrawlerVertX.getWordOccurrences(URL, wordToFind, depth);
+        Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
+        //Report report = CrawlerVertX.getWordOccurrences(URL, wordToFind, depth);
 
-        System.out.println("[TIME OF EXECUTION] : " + (System.currentTimeMillis()-startTime) + "Milliseconds");
+        System.out.println("[TIME OF EXECUTION] : " + (System.currentTimeMillis()-startTime) + " Milliseconds");
 
         //Decomment to get a report.txt
         //report.getTxtReport();

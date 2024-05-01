@@ -12,25 +12,12 @@ import java.util.regex.Pattern;
 public class CrawlerVT {
     public static Report getWordOccurrences(String entryPoint, String word, int depth) throws InterruptedException {
         HashMap<String, Integer> result = new HashMap<>();
-        List<String> links = new LinkedList<>();
+        String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
+        Pattern pattern = Pattern.compile(regex);
 
-        links.add(entryPoint);
-        for (int i = 0; i < depth; i++){
-            links.addAll(getSubLinks(links));
-        }
-
-        var list = new ArrayList<Thread>();
-        for(String subLink : links){
-            Thread vt = Thread.ofVirtual().unstarted(new WordCountTask(subLink, word, result));
-            vt.start();
-            list.add(vt);
-        }
-        list.forEach(t -> {
-            try {
-                t.join();
-            } catch (Exception ex) {};
-        });
-
+        Thread vt = Thread.ofVirtual().unstarted(new RecursiveWordCountTask(entryPoint,word, depth, result,pattern));
+        vt.start();
+        vt.join();
 
         return new Report(word, result);
     }

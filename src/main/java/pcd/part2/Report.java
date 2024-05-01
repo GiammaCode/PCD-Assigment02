@@ -22,6 +22,7 @@ public class Report {
      * */
     public void logResult() {
         System.out.println("word to find: " + word);
+        System.out.println("number of web page analyzed: " + result.size());
         for (var entry : result.entrySet()) {
             System.out.println(entry.getKey() + "   ==> " + entry.getValue());
         }

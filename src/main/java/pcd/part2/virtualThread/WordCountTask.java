@@ -32,8 +32,6 @@ public class WordCountTask implements Runnable {
     @Override
     public void run() {
         int wordCount = 0;
-        //pulisco lista sottolink
-        subLinks.clear();
         String line;
         //creo documento dove inserire html
         StringBuilder content = new StringBuilder();

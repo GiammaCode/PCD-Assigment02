@@ -1,5 +1,6 @@
 package pcd.part2.virtualThread;
 
+import pcd.part2.MyMonitor;
 import pcd.part2.Report;
 
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ public class CrawlerVT {
         HashMap<String, Integer> result = new HashMap<>();
         String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
         Pattern pattern = Pattern.compile(regex);
+        MyMonitor monitor = new MyMonitor();
 
-        Thread vt = Thread.ofVirtual().unstarted(new RecursiveWordCountTask(entryPoint,word, depth, result,pattern));
+        Thread vt = Thread.ofVirtual().unstarted(new RecursiveWordCountTask(entryPoint,word, depth, result,pattern,monitor));
         vt.start();
         vt.join();
 

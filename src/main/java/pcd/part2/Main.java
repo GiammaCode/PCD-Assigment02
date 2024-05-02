@@ -8,9 +8,9 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        //String URL = "https://scuola.eutampieri.eu/";
+       // String URL = "https://scuola.eutampieri.eu/";
         String URL = "https://www.rugbyforli.net/";
-        String wordToFind = "rugby";
+        String wordToFind = "il";
         //depth = 0 to analyze only entrypoint page
         //depth = 2 ti bloccano
         int depth = 1;

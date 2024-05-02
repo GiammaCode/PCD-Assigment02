@@ -1,0 +1,168 @@
+Index: src/main/java/pcd/part2/vertX/CountWordVerticle.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package pcd.part2.vertX;\r\n\r\nimport io.vertx.core.AbstractVerticle;\r\nimport io.vertx.core.Future;\r\nimport pcd.part2.virtualThread.WordCountTask;\r\n\r\nimport java.io.BufferedReader;\r\nimport java.io.InputStreamReader;\r\nimport java.net.URI;\r\nimport java.net.URLConnection;\r\nimport java.util.HashMap;\r\nimport java.util.LinkedList;\r\nimport java.util.List;\r\nimport java.util.regex.Matcher;\r\nimport java.util.regex.Pattern;\r\n\r\npublic class CountWordVerticle extends AbstractVerticle {\r\n    String entryPoint;\r\n    String word;\r\n    HashMap<String, Integer> result;\r\n    Pattern pattern;\r\n\r\n    List<String> subLinks = new LinkedList<>();\r\n    List<String> newSubLinks = new LinkedList<>();\r\n\r\n    private boolean isFinished = false;\r\n    private int depth;\r\n\r\n    Flag flag;\r\n\r\n    public CountWordVerticle(String entryPoint, String word, int depth,HashMap<String, Integer> result,Pattern pattern, Flag flag) {\r\n        this.newSubLinks.add(entryPoint);\r\n        this.word = word;\r\n        this.result = result;\r\n        this.pattern = pattern;\r\n        this.flag = flag;\r\n        this.depth=depth;\r\n    }\r\n\r\n    public void start() {\r\n        while (!newSubLinks.isEmpty() || !isFinished) {\r\n            subLinks.clear();\r\n            subLinks.addAll(newSubLinks);\r\n            newSubLinks.clear();\r\n            if (depth > 0) {\r\n                depth--;\r\n                for (String link : subLinks) {\r\n                    Future<Integer> future = this.getVertx().executeBlocking(() -> {\r\n                                return extracted(link, word, depth, newSubLinks, true);\r\n                            }\r\n                    );\r\n\r\n                    future.onComplete((r) -> {\r\n                        System.out.println(r);\r\n                        result.put(link, r.result());\r\n                        System.out.println(r.result());\r\n                    });\r\n\r\n                }\r\n            } else for (String link : subLinks) {\r\n                Future<Integer> future = this.getVertx().executeBlocking(() -> {\r\n                            return extracted(link, word, depth, newSubLinks, false);\r\n                        }\r\n                );\r\n\r\n                future.onComplete((r) -> {\r\n                    System.out.println(r);\r\n                    isFinished=true;\r\n                    result.put(link, r.result());\r\n                    System.out.println(r.result());\r\n                });\r\n            }\r\n        }\r\n        flag.set();\r\n    }\r\n\r\n    private int extracted(String entryPoint, String word, int depth,List<String> newSubLinks, boolean hasToFindSublinks) {\r\n        int wordCount = 0;\r\n        String line;\r\n        StringBuilder content = new StringBuilder();\r\n        try {\r\n            URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();\r\n            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));\r\n            while ((line = bufferedReader.readLine()) != null) {\r\n                if(hasToFindSublinks)\r\n                    content.append(line + \"\\n\");\r\n                String[] words = line.split(\" \");\r\n                for (String w : words) {\r\n                    wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;\r\n                }\r\n            }\r\n\r\n            bufferedReader.close();\r\n\r\n            Matcher m = this.pattern.matcher(content);\r\n            while (m.find()) {\r\n                newSubLinks.add(m.group());\r\n            }\r\n\r\n        } catch (Exception e) {\r\n            System.out.println(\"Impossibile connettersi a \" + entryPoint);\r\n        }\r\n\r\n        return wordCount;\r\n    }\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pcd/part2/vertX/CountWordVerticle.java b/src/main/java/pcd/part2/vertX/CountWordVerticle.java
+--- a/src/main/java/pcd/part2/vertX/CountWordVerticle.java	
++++ b/src/main/java/pcd/part2/vertX/CountWordVerticle.java	
+@@ -2,7 +2,6 @@
+ 
+ import io.vertx.core.AbstractVerticle;
+ import io.vertx.core.Future;
+-import pcd.part2.virtualThread.WordCountTask;
+ 
+ import java.io.BufferedReader;
+ import java.io.InputStreamReader;
+@@ -15,7 +14,6 @@
+ import java.util.regex.Pattern;
+ 
+ public class CountWordVerticle extends AbstractVerticle {
+-    String entryPoint;
+     String word;
+     HashMap<String, Integer> result;
+     Pattern pattern;
+@@ -38,7 +36,9 @@
+     }
+ 
+     public void start() {
+-        while (!newSubLinks.isEmpty() || !isFinished) {
++        while (!subLinks.isEmpty()||!isFinished) {
++
++           // System.out.println(!newSubLinks.isEmpty());
+             subLinks.clear();
+             subLinks.addAll(newSubLinks);
+             newSubLinks.clear();
+@@ -46,7 +46,8 @@
+                 depth--;
+                 for (String link : subLinks) {
+                     Future<Integer> future = this.getVertx().executeBlocking(() -> {
+-                                return extracted(link, word, depth, newSubLinks, true);
++                                System.out.println("mid part");
++                                return countWordAndMaybeSublinks(link, word, depth, true);
+                             }
+                     );
+ 
+@@ -57,24 +58,26 @@
+                     });
+ 
+                 }
+-            } else for (String link : subLinks) {
+-                Future<Integer> future = this.getVertx().executeBlocking(() -> {
+-                            return extracted(link, word, depth, newSubLinks, false);
++            } else {
++                for (String link : subLinks) {
++                    Future<Integer> future = this.getVertx().executeBlocking(() -> {
++                        System.out.println("end part");
++                        return countWordAndMaybeSublinks(link, word, depth, false);
+                         }
+                 );
+-
+-                future.onComplete((r) -> {
+-                    System.out.println(r);
+-                    isFinished=true;
+-                    result.put(link, r.result());
+-                    System.out.println(r.result());
++                    future.onComplete((r) -> {
++                        System.out.println("fine end part");
++                        isFinished=true;
++                        result.put(link, r.result());
+                 });
+             }
++            }
+         }
++        System.out.println("out of while");
+         flag.set();
+     }
+ 
+-    private int extracted(String entryPoint, String word, int depth,List<String> newSubLinks, boolean hasToFindSublinks) {
++    private int countWordAndMaybeSublinks(String entryPoint, String word, int depth, boolean hasToFindSublinks) {
+         int wordCount = 0;
+         String line;
+         StringBuilder content = new StringBuilder();
+@@ -91,10 +94,11 @@
+             }
+ 
+             bufferedReader.close();
+-
+-            Matcher m = this.pattern.matcher(content);
+-            while (m.find()) {
+-                newSubLinks.add(m.group());
++            if(hasToFindSublinks) {
++                Matcher m = this.pattern.matcher(content);
++                while (m.find()) {
++                    newSubLinks.add(m.group());
++                }
+             }
+ 
+         } catch (Exception e) {
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"2f735613-5cb8-4ddf-8a5d-4f4beacc47ce\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ComposerSettings\">\r\n    <execution />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand />\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2fjQpF5ysutHoOkmKLig1VO5BIi\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"WebServerToolWindowFactoryState\": \"false\",\r\n    \"git-widget-placeholder\": \"pasoBranchVX\",\r\n    \"last_opened_file_path\": \"C:/Users/lucap/Desktop/Università/Concurrent_and_dist_PROG/PCD-Assigment02\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"project.structure.last.edited\": \"Project\",\r\n    \"project.structure.proportion\": \"0.0\",\r\n    \"project.structure.side.proportion\": \"0.2\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\giamm\\Desktop\\PCD-Assigment02\\src\\main\\java\\pcd\\part2\\virtualThread\" />\r\n      <recent name=\"C:\\Users\\giamm\\Desktop\\PCD-Assigment02\\src\\main\\java\\pcd\\part2\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\giamm\\Desktop\\PCD-Assigment02\" />\r\n      <recent name=\"C:\\Users\\giamm\\Desktop\\PCD-Assigment02\\src\\main\\java\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Application.pcd.part2.Main\">\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"org.example.Main\" />\r\n      <module name=\"PCD-Assigment02.main\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"org.example.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"RunTrafficSimulation\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"pcd.part1.simengine_conc.gui.RunTrafficSimulation\" />\r\n      <module name=\"PCD-Assigment02.main\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"pcd.part1.simengine_conc.gui.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"pcd.part2.Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"pcd.part2.Main\" />\r\n      <module name=\"PCD-Assigment02.main\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"pcd.part2.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"build.gradle.kts\" type=\"KotlinStandaloneScriptRunConfigurationType\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"PCD-Assigment02\" />\r\n      <option name=\"filePath\" value=\"$PROJECT_DIR$/build.gradle.kts\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Kotlin script (Beta).build.gradle.kts\" />\r\n        <item itemvalue=\"Application.pcd.part2.Main\" />\r\n        <item itemvalue=\"Application.RunTrafficSimulation\" />\r\n        <item itemvalue=\"Application.Main\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"2f735613-5cb8-4ddf-8a5d-4f4beacc47ce\" name=\"Changes\" comment=\"\" />\r\n      <created>1714312190574</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1714312190574</updated>\r\n      <workItem from=\"1714312192078\" duration=\"1035000\" />\r\n      <workItem from=\"1714388946797\" duration=\"9000000\" />\r\n      <workItem from=\"1714461542755\" duration=\"4343000\" />\r\n      <workItem from=\"1714480006031\" duration=\"11509000\" />\r\n      <workItem from=\"1714549807480\" duration=\"703000\" />\r\n      <workItem from=\"1714559110131\" duration=\"41000\" />\r\n      <workItem from=\"1714572735446\" duration=\"4707000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -6,6 +6,7 @@
+   <component name="ChangeListManager">
+     <list default="true" id="2f735613-5cb8-4ddf-8a5d-4f4beacc47ce" name="Changes" comment="">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" afterDir="false" />
+     </list>
+@@ -56,24 +57,24 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "WebServerToolWindowFactoryState": "false",
+-    "git-widget-placeholder": "pasoBranchVX",
+-    "last_opened_file_path": "C:/Users/lucap/Desktop/Università/Concurrent_and_dist_PROG/PCD-Assigment02",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "project.structure.last.edited": "Project",
+-    "project.structure.proportion": "0.0",
+-    "project.structure.side.proportion": "0.2",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;pasoBranchVX&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/lucap/Desktop/Università/Concurrent_and_dist_PROG/PCD-Assigment02&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecentsManager">
+     <key name="CopyFile.RECENT_KEYS">
+       <recent name="C:\Users\giamm\Desktop\PCD-Assigment02\src\main\java\pcd\part2\virtualThread" />
+@@ -155,6 +156,7 @@
+       <workItem from="1714549807480" duration="703000" />
+       <workItem from="1714559110131" duration="41000" />
+       <workItem from="1714572735446" duration="4707000" />
++      <workItem from="1714634711006" duration="3706000" />
+     </task>
+     <servers />
+   </component>

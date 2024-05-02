@@ -1,5 +1,7 @@
 package pcd.part2.virtualThread;
 
+import pcd.part2.MyMonitor;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -13,6 +15,8 @@ import java.util.regex.Pattern;
 
 public class RecursiveWordCountTask implements Runnable {
     private String entryPoint;
+
+    private MyMonitor monitor;
     private String word;
     private int depth;
     private List<Thread> threads = new LinkedList<>();
@@ -20,8 +24,9 @@ public class RecursiveWordCountTask implements Runnable {
     Pattern pattern;
     private HashMap<String, Integer> result;
 
-    public RecursiveWordCountTask(String entryPoint, String word, int depth, HashMap<String, Integer> result, Pattern pattern) {
+    public RecursiveWordCountTask(String entryPoint, String word, int depth, HashMap<String, Integer> result, Pattern pattern, MyMonitor monitor) {
         this.entryPoint = entryPoint;
+        this.monitor=monitor;
         this.word = word;
         this.depth = depth;
         this.result = result;
@@ -46,7 +51,7 @@ public class RecursiveWordCountTask implements Runnable {
                 }
             }
             bufferedReader.close();
-            this.result.put(this.entryPoint, wordCount);
+            this.monitor.addResult(result,this.entryPoint, wordCount);
             //start recursive part
             if (this.depth > 0) {
                 //search sublinks
@@ -57,7 +62,7 @@ public class RecursiveWordCountTask implements Runnable {
                 this.depth--;
                 for (String sublink : subLinks) {
                     Thread vt = Thread.ofVirtual()
-                            .unstarted(new RecursiveWordCountTask(sublink, this.word, this.depth, this.result, this.pattern));
+                            .unstarted(new RecursiveWordCountTask(sublink, this.word, this.depth, this.result, this.pattern,this.monitor));
                     this.threads.add(vt);
                     vt.start();
                 }

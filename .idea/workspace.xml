@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f735613-5cb8-4ddf-8a5d-4f4beacc47ce" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/MyMonitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/CrawlerVT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/CrawlerVT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/RecursiveWordCountTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/virtualThread/RecursiveWordCountTask.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +44,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="pasoBranchVX" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -136,9 +144,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
-        <item itemvalue="Application.pcd.part2.Main" />
         <item itemvalue="Application.RunTrafficSimulation" />
+        <item itemvalue="Application.pcd.part2.Main" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
       </list>
     </recent_temporary>
   </component>

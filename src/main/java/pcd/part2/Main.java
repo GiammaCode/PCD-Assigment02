@@ -8,11 +8,11 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        String URL = "https://finagricola.it/il-fresco/pomodori/pomodoro-ciliegino/";
-        String wordToFind = "pomodoro";
+        String URL = "https://www.my-personaltrainer.it/alimentazione/ceci-proprieta-benefici-e-formati.html";
+        String wordToFind = "al";
         //depth = 0 to analyze only entrypoint page
         //depth = 2 ti bloccano
-        int depth = 0;
+        int depth = 1;
 
         long startTime = System.currentTimeMillis();
 

@@ -38,17 +38,18 @@ public class CountWordVerticle extends AbstractVerticle {
     }
 
     public void start() {
-        while (!newSubLinks.isEmpty() || !isFinished) {
+        while (!subLinks.isEmpty() || !isFinished) {
             subLinks.clear();
             subLinks.addAll(newSubLinks);
             newSubLinks.clear();
             if (depth > 0) {
                 depth--;
                 for (String link : subLinks) {
-                    Future<Integer> future = this.getVertx().executeBlocking(() -> {
-                                return extracted(link, word, depth, newSubLinks, true);
-                            }
-                    );
+
+                    Future<Integer> future = getVertx().executeBlocking(() -> {
+                            System.out.println("mid part"+ link);
+                            return extracted(link, word, depth);
+                            });
 
                     future.onComplete((r) -> {
                         System.out.println(r);
@@ -57,49 +58,52 @@ public class CountWordVerticle extends AbstractVerticle {
                     });
 
                 }
-            } else for (String link : subLinks) {
-                Future<Integer> future = this.getVertx().executeBlocking(() -> {
-                            return extracted(link, word, depth, newSubLinks, false);
-                        }
-                );
+            } else {
+                for (String link : subLinks) {
+                    Future<Integer> future = this.getVertx().executeBlocking(() -> {
+                                System.out.println("end part");
+                                return extracted(link, word, depth);
+                            });
 
-                future.onComplete((r) -> {
-                    System.out.println(r);
-                    isFinished=true;
-                    result.put(link, r.result());
-                    System.out.println(r.result());
-                });
+                    future.onComplete((r) -> {
+                        System.out.println(r);
+                        isFinished = true;
+                        result.put(link, r.result());
+                        System.out.println(r.result());
+                    });
+                }
             }
         }
         flag.set();
     }
 
-    private int extracted(String entryPoint, String word, int depth,List<String> newSubLinks, boolean hasToFindSublinks) {
+    private int extracted(String entryPoint, String word, int depth) {
         int wordCount = 0;
         String line;
         StringBuilder content = new StringBuilder();
         try {
-            URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            while ((line = bufferedReader.readLine()) != null) {
-                if(hasToFindSublinks)
-                    content.append(line + "\n");
-                String[] words = line.split(" ");
-                for (String w : words) {
-                    wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
+                URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                while ((line = bufferedReader.readLine()) != null) {
+                    if(depth>0)
+                        content.append(line + "\n");
+                    String[] words = line.split(" ");
+                    for (String w : words) {
+                        wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
+                    }
                 }
-            }
-
             bufferedReader.close();
-
-            Matcher m = this.pattern.matcher(content);
-            while (m.find()) {
-                newSubLinks.add(m.group());
-            }
+                if(depth>0) {
+                    Matcher m = pattern.matcher(content);
+                    while (m.find()) {
+                        newSubLinks.add(m.group());
+                    }
+                }
 
         } catch (Exception e) {
             System.out.println("Impossibile connettersi a " + entryPoint);
         }
+        System.out.println(wordCount);
 
         return wordCount;
     }

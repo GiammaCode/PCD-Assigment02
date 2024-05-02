@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class MyMonitor {
     Lock lockMap = new ReentrantLock();
     Lock lockDec = new ReentrantLock();
-    public synchronized void syncPut(HashMap<String,Integer> result,String link, int countWord){
+    public void syncPut(HashMap<String,Integer> result,String link, int countWord){
         try {
             lockMap.lock();
             result.put(link,countWord);
@@ -15,7 +15,7 @@ public class MyMonitor {
             lockMap.unlock();
         }
     }
-    public synchronized int syncDec(int depth){
+    public int syncDec(int depth){
         try {
             lockMap.lock();
             depth--;

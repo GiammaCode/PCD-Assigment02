@@ -22,7 +22,7 @@ public class CrawlerVertX {
         Pattern pattern = Pattern.compile(regex);
         Vertx vertx = Vertx.vertx();
 
-        CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, result,pattern,flag);
+        CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, depth,result,pattern,flag);
         vertx.deployVerticle(verticle);
         while(!flag.isSet()){
          System.out.println("im waiting");

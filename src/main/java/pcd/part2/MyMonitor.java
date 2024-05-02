@@ -5,13 +5,24 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MyMonitor {
-    Lock lock = new ReentrantLock();
-    public synchronized void addResult(HashMap<String,Integer> result,String link, int countWord){
+    Lock lockMap = new ReentrantLock();
+    Lock lockDec = new ReentrantLock();
+    public synchronized void syncPut(HashMap<String,Integer> result,String link, int countWord){
         try {
-            lock.lock();
+            lockMap.lock();
             result.put(link,countWord);
         }finally {
-            lock.unlock();
+            lockMap.unlock();
         }
     }
+    public synchronized int syncDec(int depth){
+        try {
+            lockMap.lock();
+            depth--;
+        }finally {
+            lockMap.unlock();
+        }
+        return depth;
+    }
+
 }

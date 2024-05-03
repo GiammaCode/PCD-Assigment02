@@ -2,7 +2,6 @@ package pcd.part2.vertX;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import pcd.part2.virtualThread.WordCountTask;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -29,6 +28,9 @@ public class CountWordVerticle extends AbstractVerticle {
     Flag flag;
 
     public CountWordVerticle(String entryPoint, String word, int depth,HashMap<String, Integer> result,Pattern pattern, Flag flag) {
+        //mancava entrypoint nel costruttore !!!!
+        this.entryPoint = entryPoint;
+
         this.newSubLinks.add(entryPoint);
         this.word = word;
         this.result = result;
@@ -38,16 +40,27 @@ public class CountWordVerticle extends AbstractVerticle {
     }
 
     public void start() {
+        //finche ci sono sotto link o non è finito
+        //while(!true || !false) quindi lui rimane sempre nel while
         while (!newSubLinks.isEmpty() || !isFinished) {
+            //pulisco sublink
+            //sublink = newsublink
+            System.out.println("[isfinished]" + isFinished);
             subLinks.clear();
             subLinks.addAll(newSubLinks);
             newSubLinks.clear();
+
+            //questo lo aggiunto io perchè non esece mai dal ciclo while
+            //perche te setti la flag dentro la future ma la future non la completa mai
+            //perchè non arrivi mai a return wordCount
+            isFinished = true;
+
+            //entro nelle altre pagine
             if (depth > 0) {
                 depth--;
                 for (String link : subLinks) {
-                    Future<Integer> future = this.getVertx().executeBlocking(() -> {
-                                return extracted(link, word, depth, newSubLinks, true);
-                            }
+                    Future<Integer> future = this.getVertx().executeBlocking(
+                            () -> extracted(link, word, newSubLinks, true)
                     );
 
                     future.onComplete((r) -> {
@@ -57,16 +70,17 @@ public class CountWordVerticle extends AbstractVerticle {
                     });
 
                 }
-            } else for (String link : subLinks) {
-                Future<Integer> future = this.getVertx().executeBlocking(() -> {
-                            return extracted(link, word, depth, newSubLinks, false);
-                        }
+            }
+            //controllo solo pagina principale
+            else  {
+                Future<Integer> future = this.getVertx().executeBlocking(
+                        () -> extracted(entryPoint, word, newSubLinks, false)
                 );
 
                 future.onComplete((r) -> {
                     System.out.println(r);
                     isFinished=true;
-                    result.put(link, r.result());
+                    result.put(entryPoint, r.result());
                     System.out.println(r.result());
                 });
             }
@@ -74,7 +88,7 @@ public class CountWordVerticle extends AbstractVerticle {
         flag.set();
     }
 
-    private int extracted(String entryPoint, String word, int depth,List<String> newSubLinks, boolean hasToFindSublinks) {
+    private int extracted(String entryPoint, String word,List<String> newSubLinks, boolean hasToFindSublinks) {
         int wordCount = 0;
         String line;
         StringBuilder content = new StringBuilder();
@@ -82,18 +96,21 @@ public class CountWordVerticle extends AbstractVerticle {
             URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             while ((line = bufferedReader.readLine()) != null) {
-                if(hasToFindSublinks)
-                    content.append(line + "\n");
+                //System.out.println(line);
+                if(hasToFindSublinks) content.append(line).append("\n");
+
                 String[] words = line.split(" ");
                 for (String w : words) {
                     wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
                 }
             }
-
+            System.out.println("while finito");
             bufferedReader.close();
 
+            //MA SE IO HO MESSO hasToFindSublink = false analizzo una content vuoto? che succede?
             Matcher m = this.pattern.matcher(content);
             while (m.find()) {
+                System.out.println(m.group());
                 newSubLinks.add(m.group());
             }
 

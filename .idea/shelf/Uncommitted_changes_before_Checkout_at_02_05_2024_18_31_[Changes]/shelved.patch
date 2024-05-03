@@ -1,0 +1,49 @@
+Index: src/main/java/pcd/part2/vertX/CrawlerVertX.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package pcd.part2.vertX;\r\n\r\nimport io.vertx.core.DeploymentOptions;\r\nimport io.vertx.core.Vertx;\r\nimport pcd.part2.Report;\r\nimport java.util.HashMap;\r\nimport java.util.regex.Pattern;\r\n\r\n\r\npublic class CrawlerVertX {\r\n    public static Report getWordOccurrences (String entryPoint, String word, int depth) throws InterruptedException {\r\n        HashMap<String, Integer> result = new HashMap<>();\r\n        Flag flag = new Flag();\r\n        /*\r\n        Un’applicazione Vert.x consiste di uno o più componenti chiamati Verticle. questi sono pezzi di\r\n        codice che il motore di Vert.x esegue.\r\n        Ogni verticle viene eseguito in maniera concorrente rispetto agli altri e non c’è uno stato che viene condiviso.\r\n        Tradotto in parole semplici, si riesce a creare applicazioni multi-threaded senza dover gestire problematiche\r\n        di concorrenza come la sincronizzazione o i lock tra thread.\r\n        * */\r\n        String regex = \"\\\\b(?<=(href=\\\"))[^\\\"]*?(?=\\\")\";\r\n        Pattern pattern = Pattern.compile(regex);\r\n        Vertx vertx = Vertx.vertx();\r\n\r\n        CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, depth,result,pattern,flag);\r\n        vertx.deployVerticle(verticle);\r\n        while(!flag.isSet()){\r\n         System.out.println(\"im waiting\");\r\n        }\r\n\r\n        return new Report(word, result);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pcd/part2/vertX/CrawlerVertX.java b/src/main/java/pcd/part2/vertX/CrawlerVertX.java
+--- a/src/main/java/pcd/part2/vertX/CrawlerVertX.java	
++++ b/src/main/java/pcd/part2/vertX/CrawlerVertX.java	
+@@ -25,7 +25,7 @@
+         CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, depth,result,pattern,flag);
+         vertx.deployVerticle(verticle);
+         while(!flag.isSet()){
+-         System.out.println("im waiting");
++         //System.out.print("");
+         }
+ 
+         return new Report(word, result);
+Index: src/main/java/pcd/part2/vertX/CountWordVerticle.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package pcd.part2.vertX;\r\n\r\nimport io.vertx.core.AbstractVerticle;\r\nimport io.vertx.core.Future;\r\nimport pcd.part2.virtualThread.WordCountTask;\r\n\r\nimport java.io.BufferedReader;\r\nimport java.io.InputStreamReader;\r\nimport java.net.URI;\r\nimport java.net.URLConnection;\r\nimport java.util.HashMap;\r\nimport java.util.LinkedList;\r\nimport java.util.List;\r\nimport java.util.regex.Matcher;\r\nimport java.util.regex.Pattern;\r\n\r\npublic class CountWordVerticle extends AbstractVerticle {\r\n    String entryPoint;\r\n    String word;\r\n    HashMap<String, Integer> result;\r\n    Pattern pattern;\r\n\r\n    List<String> subLinks = new LinkedList<>();\r\n    List<String> newSubLinks = new LinkedList<>();\r\n\r\n    private boolean isFinished = false;\r\n    private int depth;\r\n\r\n    Flag flag;\r\n\r\n    public CountWordVerticle(String entryPoint, String word, int depth,HashMap<String, Integer> result,Pattern pattern, Flag flag) {\r\n        this.newSubLinks.add(entryPoint);\r\n        this.word = word;\r\n        this.result = result;\r\n        this.pattern = pattern;\r\n        this.flag = flag;\r\n        this.depth=depth;\r\n    }\r\n\r\n    public void start() {\r\n        while (!newSubLinks.isEmpty() || !isFinished) {\r\n            subLinks.clear();\r\n            subLinks.addAll(newSubLinks);\r\n            newSubLinks.clear();\r\n            if (depth > 0) {\r\n                depth--;\r\n                for (String link : subLinks) {\r\n                    Future<Integer> future = this.getVertx().executeBlocking(() -> {\r\n                                return extracted(link, word, depth, newSubLinks, true);\r\n                            }\r\n                    );\r\n\r\n                    future.onComplete((r) -> {\r\n                        System.out.println(r);\r\n                        result.put(link, r.result());\r\n                        System.out.println(r.result());\r\n                    });\r\n\r\n                }\r\n            } else for (String link : subLinks) {\r\n                Future<Integer> future = this.getVertx().executeBlocking(() -> {\r\n                            return extracted(link, word, depth, newSubLinks, false);\r\n                        }\r\n                );\r\n\r\n                future.onComplete((r) -> {\r\n                    System.out.println(r);\r\n                    isFinished=true;\r\n                    result.put(link, r.result());\r\n                    System.out.println(r.result());\r\n                });\r\n            }\r\n        }\r\n        flag.set();\r\n    }\r\n\r\n    private int extracted(String entryPoint, String word, int depth,List<String> newSubLinks, boolean hasToFindSublinks) {\r\n        int wordCount = 0;\r\n        String line;\r\n        StringBuilder content = new StringBuilder();\r\n        try {\r\n            URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();\r\n            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));\r\n            while ((line = bufferedReader.readLine()) != null) {\r\n                if(hasToFindSublinks)\r\n                    content.append(line + \"\\n\");\r\n                String[] words = line.split(\" \");\r\n                for (String w : words) {\r\n                    wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;\r\n                }\r\n            }\r\n\r\n            bufferedReader.close();\r\n\r\n            Matcher m = this.pattern.matcher(content);\r\n            while (m.find()) {\r\n                newSubLinks.add(m.group());\r\n            }\r\n\r\n        } catch (Exception e) {\r\n            System.out.println(\"Impossibile connettersi a \" + entryPoint);\r\n        }\r\n\r\n        return wordCount;\r\n    }\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pcd/part2/vertX/CountWordVerticle.java b/src/main/java/pcd/part2/vertX/CountWordVerticle.java
+--- a/src/main/java/pcd/part2/vertX/CountWordVerticle.java	
++++ b/src/main/java/pcd/part2/vertX/CountWordVerticle.java	
+@@ -38,10 +38,19 @@
+     }
+ 
+     public void start() {
++        System.out.println("newsublink" + newSubLinks);
++        System.out.println("sublink" + subLinks);
++
++        //finche la lista è piena o è finito ciclo
+         while (!newSubLinks.isEmpty() || !isFinished) {
++            //pulisco la lista link
+             subLinks.clear();
++            //gli aggiungo la lista NUOVAsublinks ?????
++            //al primo ciclo gli metto l'entrypoint
+             subLinks.addAll(newSubLinks);
++            //pulisco la NUOVA lista ??????
+             newSubLinks.clear();
++
+             if (depth > 0) {
+                 depth--;
+                 for (String link : subLinks) {

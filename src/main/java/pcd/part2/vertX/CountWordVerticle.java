@@ -59,19 +59,19 @@ public class CountWordVerticle extends AbstractVerticle {
 
                 }
             } else {
-                for (String link : subLinks) {
+
                     Future<Integer> future = this.getVertx().executeBlocking(() -> {
                                 System.out.println("end part");
-                                return extracted(link, word, depth);
+                                return extracted(subLinks.get(0), word, depth);
                             });
 
                     future.onComplete((r) -> {
                         System.out.println(r);
                         isFinished = true;
-                        result.put(link, r.result());
+                        result.put(subLinks.get(0), r.result());
                         System.out.println(r.result());
                     });
-                }
+
             }
         }
         flag.set();

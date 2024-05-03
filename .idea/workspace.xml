@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,6 +155,7 @@
       <workItem from="1714549807480" duration="703000" />
       <workItem from="1714559110131" duration="41000" />
       <workItem from="1714572735446" duration="4707000" />
+      <workItem from="1714662849346" duration="155000" />
     </task>
     <servers />
   </component>

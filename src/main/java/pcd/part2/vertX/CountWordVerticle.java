@@ -59,6 +59,7 @@ public class CountWordVerticle extends AbstractVerticle {
             if (depth > 0) {
                 depth--;
                 for (String link : subLinks) {
+
                     Future<Integer> future = this.getVertx().executeBlocking(
                             () -> extracted(link, word, newSubLinks, true)
                     );
@@ -70,6 +71,7 @@ public class CountWordVerticle extends AbstractVerticle {
                     });
 
                 }
+
             }
             //controllo solo pagina principale
             else  {
@@ -88,11 +90,14 @@ public class CountWordVerticle extends AbstractVerticle {
         flag.set();
     }
 
+
     private int extracted(String entryPoint, String word,List<String> newSubLinks, boolean hasToFindSublinks) {
+
         int wordCount = 0;
         String line;
         StringBuilder content = new StringBuilder();
         try {
+
             URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             while ((line = bufferedReader.readLine()) != null) {
@@ -117,6 +122,7 @@ public class CountWordVerticle extends AbstractVerticle {
         } catch (Exception e) {
             System.out.println("Impossibile connettersi a " + entryPoint);
         }
+        System.out.println(wordCount);
 
         return wordCount;
     }

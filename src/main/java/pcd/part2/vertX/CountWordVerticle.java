@@ -38,18 +38,15 @@ public class CountWordVerticle extends AbstractVerticle {
     }
 
     public void start() {
-        while (!subLinks.isEmpty() || !isFinished) {
-            subLinks.clear();
-            subLinks.addAll(newSubLinks);
-            newSubLinks.clear();
+
             if (depth > 0) {
                 depth--;
                 for (String link : subLinks) {
 
                     Future<Integer> future = getVertx().executeBlocking(() -> {
-                            System.out.println("mid part"+ link);
-                            return extracted(link, word, depth);
-                            });
+                        System.out.println("mid part" + link);
+                        return extracted(link, word, depth);
+                    });
 
                     future.onComplete((r) -> {
                         System.out.println(r);
@@ -60,21 +57,16 @@ public class CountWordVerticle extends AbstractVerticle {
                 }
             } else {
 
-                    Future<Integer> future = this.getVertx().executeBlocking(() -> {
-                                System.out.println("end part");
-                                return extracted(subLinks.get(0), word, depth);
-                            });
-
-                    future.onComplete((r) -> {
-                        System.out.println(r);
-                        isFinished = true;
-                        result.put(subLinks.get(0), r.result());
-                        System.out.println(r.result());
-                    });
-
+                Future<Integer> future = this.getVertx().executeBlocking(() -> {
+                    System.out.println("end part");
+                    return extracted(newSubLinks.get(0), word, depth);
+                }).onComplete((r) -> {
+                    System.out.println(r);
+                    result.put(newSubLinks.get(0), r.result());
+                    flag.set();
+                    isFinished = true;
+                });
             }
-        }
-        flag.set();
     }
 
     private int extracted(String entryPoint, String word, int depth) {
@@ -104,7 +96,6 @@ public class CountWordVerticle extends AbstractVerticle {
             System.out.println("Impossibile connettersi a " + entryPoint);
         }
         System.out.println(wordCount);
-
         return wordCount;
     }
 

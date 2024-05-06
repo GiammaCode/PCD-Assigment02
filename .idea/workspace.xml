@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f735613-5cb8-4ddf-8a5d-4f4beacc47ce" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_31_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_31_[Changes]1/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_31__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_33_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_33_[Changes]1/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_33__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" afterDir="false" />
     </list>
@@ -42,6 +49,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -61,7 +73,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;pasoBranchVX&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging pasoBranchVX&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/lucap/Desktop/Università/Concurrent_and_dist_PROG/PCD-Assigment02&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -134,9 +146,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
-        <item itemvalue="Application.pcd.part2.Main" />
         <item itemvalue="Application.RunTrafficSimulation" />
+        <item itemvalue="Application.pcd.part2.Main" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
       </list>
     </recent_temporary>
   </component>
@@ -157,6 +170,7 @@
       <workItem from="1714572735446" duration="4707000" />
       <workItem from="1714662849346" duration="155000" />
       <workItem from="1714724223668" duration="1678000" />
+      <workItem from="1714985151894" duration="1180000" />
     </task>
     <servers />
   </component>

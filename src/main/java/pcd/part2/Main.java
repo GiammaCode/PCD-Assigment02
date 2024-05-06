@@ -8,8 +8,8 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        String URL = "https://www.my-personaltrainer.it/alimentazione/ceci-proprieta-benefici-e-formati.html";
-        String wordToFind = "al";
+        String URL = "https://www.rugbyforli.net/";
+        String wordToFind = "rugby";
         //depth = 0 to analyze only entrypoint page
         //depth = 2 ti bloccano
         int depth = 0;

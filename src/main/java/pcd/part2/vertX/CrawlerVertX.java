@@ -25,7 +25,11 @@ public class CrawlerVertX {
         CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, depth,result,pattern,flag);
         vertx.deployVerticle(verticle);
         while(!flag.isSet()){
+<<<<<<< HEAD
 
+=======
+         //System.out.println("im waiting");
+>>>>>>> 735e3c1f301a8c2205d6f91c06730c1db3a07f9f
         }
 
         return new Report(word, result);

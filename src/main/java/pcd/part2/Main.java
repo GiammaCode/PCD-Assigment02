@@ -1,5 +1,6 @@
 package pcd.part2;
 
+import pcd.part2.rx.CrawlerRx;
 import pcd.part2.vt.CrawlerVT;
 
 import java.io.IOException;
@@ -16,9 +17,11 @@ public class Main {
 
         long startTime = System.currentTimeMillis();
 
-        //Report report  = RecursiveCounter.getWordOccurrences(URL, wordToFind, depth);
-        Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
+
+        //Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
         //Report report = CrawlerVertX.getWordOccurrences(URL, wordToFind, depth);
+        Report report = CrawlerRx.getWordOccurrences(URL, wordToFind, depth);
+
 
         System.out.println("[TIME OF EXECUTION] : " + (System.currentTimeMillis()-startTime) + " Milliseconds");
 

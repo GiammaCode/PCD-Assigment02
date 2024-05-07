@@ -1,12 +1,8 @@
-package pcd.part2.vertX;
+package pcd.part2.ev;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URLConnection;
 import java.util.HashMap;
 
 public class CountWordVerticle extends AbstractVerticle {

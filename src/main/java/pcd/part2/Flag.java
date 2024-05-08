@@ -1,4 +1,4 @@
-package pcd.part2.vertX;
+package pcd.part2;
 
 public class Flag {
     boolean  flag;

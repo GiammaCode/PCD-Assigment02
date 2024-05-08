@@ -34,7 +34,7 @@ class WordCounter extends AbstractVerticle {
     }
 
     public void start(Promise<Void> startPromise) {
-        log("started.");
+        log("started word counter");
         EventBus eb = this.getVertx().eventBus();
         eb.consumer("my-topic", message -> {
             String receivedJsonList = (String) message.body();
@@ -57,7 +57,7 @@ class WordCounter extends AbstractVerticle {
                 });
             }
         });
-        log("Ready.");
+        log("waiting for links");
         startPromise.complete();
     }
 
@@ -81,14 +81,12 @@ class WordCounter extends AbstractVerticle {
                     wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
                 }
             }
-            System.out.println("while finito");
             bufferedReader.close();
 
             //MA SE IO HO MESSO hasToFindSublink = false analizzo una content vuoto? che succede?
         } catch (Exception e) {
             System.out.println("Impossibile connettersi a " + entryPoint);
         }
-        System.out.println(wordCount);
         return wordCount;
 
     }

@@ -35,13 +35,11 @@ public class SubLinker extends AbstractVerticle {
         }
 
         public void start() {
-            log("started.");
+            log("started subLinkes");
             EventBus eb = this.getVertx().eventBus();
             Future<List<String>> future = getVertx().executeBlocking(() -> {
-                log("inside");
                 return  SubLinks(entrypoint,depth,subLinks);
                     }).onComplete((result)-> {
-                        log("complete");
                         try {
                             jsonList = objectMapper.writeValueAsString(result.result());
                         } catch (JsonProcessingException e) {
@@ -72,7 +70,6 @@ public class SubLinker extends AbstractVerticle {
                     content.append(line).append("\n");
                 }
             }
-            System.out.println("while finito");
             bufferedReader.close();
 
             subLinks.add(entryPoint);
@@ -80,14 +77,12 @@ public class SubLinker extends AbstractVerticle {
             //MA SE IO HO MESSO hasToFindSublink = false analizzo una content vuoto? che succede?
             Matcher m = this.pattern.matcher(content);
             while (m.find()) {
-                System.out.println(m.group());
                 SubLinks(m.group(),depth--,subLinks);
             }
 
         } catch (Exception e) {
             System.out.println("Impossibile connettersi a " + entryPoint);
         }
-        log(subLinks.get(0));
         return subLinks;
     }
     }

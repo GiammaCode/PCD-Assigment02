@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f735613-5cb8-4ddf-8a5d-4f4beacc47ce" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_31_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_31_[Changes]1/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_31__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_33_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_33_[Changes]1/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_33__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/SubLinker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/WordCounter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_31__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_31__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_33__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_02_05_2024_18_33__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" afterDir="false" />
@@ -68,24 +66,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging pasoBranchVX&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/lucap/Desktop/Università/Concurrent_and_dist_PROG/PCD-Assigment02&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "pasoBranchVX",
+    "last_opened_file_path": "C:/Users/lucap/Desktop/Università/Concurrent_and_dist_PROG/PCD-Assigment02",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\giamm\Desktop\PCD-Assigment02\src\main\java\pcd\part2\virtualThread" />
@@ -96,7 +94,7 @@
       <recent name="C:\Users\giamm\Desktop\PCD-Assigment02\src\main\java" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.pcd.part2.Main">
+  <component name="RunManager" selected="Application.Step7_EventBus">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="PCD-Assigment02.main" />
@@ -116,6 +114,19 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="pcd.part1.simengine_conc.gui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Step7_EventBus" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="pcd.part2.vertX.Step7_EventBus" />
+      <module name="PCD-Assigment02.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pcd.part2.vertX.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -145,11 +156,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Step7_EventBus" />
         <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
         <item itemvalue="Application.RunTrafficSimulation" />
         <item itemvalue="Application.pcd.part2.Main" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
       </list>
     </recent_temporary>
   </component>

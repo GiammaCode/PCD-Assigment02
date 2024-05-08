@@ -1,6 +1,5 @@
 package pcd.part2.vertX;
 
-import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import pcd.part2.Report;
 import java.util.HashMap;
@@ -22,14 +21,14 @@ public class CrawlerVertX {
         Pattern pattern = Pattern.compile(regex);
         Vertx vertx = Vertx.vertx();
 
-        CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, depth,result,pattern,flag);
-        vertx.deployVerticle(verticle);
+      //  CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, depth,result,pattern,flag);
+       // vertx.deployVerticle(verticle);
+        vertx.deployVerticle(new WordCounter(word), res -> {
+            /* deploy the second verticle only when the first has completed */
+            vertx.deployVerticle(new SubLinker(entryPoint,depth,pattern));
+        });
         while(!flag.isSet()){
-<<<<<<< HEAD
-
-=======
          //System.out.println("im waiting");
->>>>>>> 735e3c1f301a8c2205d6f91c06730c1db3a07f9f
         }
 
         return new Report(word, result);

@@ -86,7 +86,7 @@ public class CountWordVerticle extends AbstractVerticle {
         return wordCount;
 
     }
-    private Collection<String> SubLinks(String entryPoint, int depth) {
+    public Collection<String> SubLinks(String entryPoint, int depth) {
         String line;
         StringBuilder content = new StringBuilder();
         try {

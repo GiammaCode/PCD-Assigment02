@@ -23,7 +23,7 @@ public class CrawlerVertX {
 
       //  CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, depth,result,pattern,flag);
        // vertx.deployVerticle(verticle);
-        vertx.deployVerticle(new WordCounter(word), res -> {
+        vertx.deployVerticle(new WordCounter(word,result,flag), res -> {
             /* deploy the second verticle only when the first has completed */
             vertx.deployVerticle(new SubLinker(entryPoint,depth,pattern));
         });

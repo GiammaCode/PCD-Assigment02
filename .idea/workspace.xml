@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2f735613-5cb8-4ddf-8a5d-4f4beacc47ce" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CountWordVerticle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/SubLinker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/SubLinker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/CrawlerVertX.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/WordCounter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pcd/part2/vertX/WordCounter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

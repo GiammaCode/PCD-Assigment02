@@ -1,4 +1,4 @@
-package pcd.part2.vt;
+package pcd.part2.VirtualThread;
 
 import pcd.part2.MyMonitor;
 import pcd.part2.Report;

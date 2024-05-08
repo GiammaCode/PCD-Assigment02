@@ -1,8 +1,8 @@
 package pcd.part2;
 
-import pcd.part2.ev.CrawlerVertX;
+import pcd.part2.VertX.CrawlerVertX;
 import pcd.part2.rx.CrawlerRx;
-import pcd.part2.vt.CrawlerVT;
+import pcd.part2.VirtualThread.CrawlerVT;
 
 import java.io.IOException;
 

@@ -18,14 +18,12 @@ public class Main {
         long startTime = System.currentTimeMillis();
 
         //Report report  = RecursiveCounter.getWordOccurrences(URL, wordToFind, depth);
-        Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
-        //Report report = CrawlerVertX.getWordOccurrences(URL, wordToFind, depth);
-
+        //Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
+        Report report = CrawlerVertX.getWordOccurrences(URL, wordToFind, depth);
         System.out.println("[TIME OF EXECUTION] : " + (System.currentTimeMillis()-startTime) + " Milliseconds");
 
         //Decomment to get a report.txt
         //report.getTxtReport();
-
         report.logResult();
 
 

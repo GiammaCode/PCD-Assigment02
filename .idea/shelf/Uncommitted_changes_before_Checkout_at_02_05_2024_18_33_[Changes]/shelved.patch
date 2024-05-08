@@ -1,0 +1,19 @@
+Index: src/main/java/pcd/part2/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package pcd.part2;\r\n\r\nimport pcd.part2.vertX.CrawlerVertX;\r\nimport pcd.part2.virtualThread.CrawlerVT;\r\n\r\nimport java.io.IOException;\r\n\r\npublic class Main {\r\n\r\n    public static void main(String[] args) throws IOException, InterruptedException {\r\n       // String URL = \"https://scuola.eutampieri.eu/\";\r\n        String URL = \"https://www.akwabaforli.com/\";\r\n        String wordToFind = \"il\";\r\n        //depth = 0 to analyze only entrypoint page\r\n        //depth = 2 ti bloccano\r\n        int depth = 1;\r\n\r\n        long startTime = System.currentTimeMillis();\r\n\r\n        //Report report  = RecursiveCounter.getWordOccurrences(URL, wordToFind, depth);\r\n        Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);\r\n        //Report report = CrawlerVertX.getWordOccurrences(URL, wordToFind, depth);\r\n\r\n        System.out.println(\"[TIME OF EXECUTION] : \" + (System.currentTimeMillis()-startTime) + \" Milliseconds\");\r\n\r\n        //Decomment to get a report.txt\r\n        //report.getTxtReport();\r\n\r\n        report.logResult();\r\n\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/pcd/part2/Main.java b/src/main/java/pcd/part2/Main.java
+--- a/src/main/java/pcd/part2/Main.java	
++++ b/src/main/java/pcd/part2/Main.java	
+@@ -13,7 +13,7 @@
+         String wordToFind = "il";
+         //depth = 0 to analyze only entrypoint page
+         //depth = 2 ti bloccano
+-        int depth = 1;
++        int depth = 2;
+ 
+         long startTime = System.currentTimeMillis();
+ 

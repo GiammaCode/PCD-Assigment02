@@ -1,7 +1,7 @@
-package pcd.part2;
+package pcd.part2.GUI;
 
-
-import pcd.part2.VirtualThread.RecursiveWordCountTask;
+import pcd.part2.cli.vt.RecursiveWordCountTask;
+import pcd.part2.MyMonitor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class GUI extends JFrame {
+public class Gui extends JFrame {
     private JTextField linkField;
     private JTextField depthField;
     private JTextField wordField;
     private JButton countButton;
     private JTextField resultField;
 
-    public GUI() {
+    public Gui() {
         setTitle("Assigment02 PCD");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 600);
@@ -92,12 +92,4 @@ public class GUI extends JFrame {
         return result;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new GUI();
-            }
-        });
-    }
 }

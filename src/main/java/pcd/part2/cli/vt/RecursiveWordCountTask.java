@@ -1,11 +1,10 @@
-package pcd.part2.VirtualThread;
+package pcd.part2.cli.vt;
 
 import pcd.part2.MyMonitor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -39,6 +38,7 @@ public class RecursiveWordCountTask implements Runnable {
         String line;
         StringBuilder content = new StringBuilder();
         try {
+            //open connection
             URL url = new URL(entryPoint);
             //open connection
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

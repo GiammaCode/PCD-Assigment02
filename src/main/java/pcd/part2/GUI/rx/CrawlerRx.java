@@ -1,4 +1,4 @@
-package pcd.part2.rx;
+package pcd.part2.GUI.rx;
 
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import pcd.part2.Report;

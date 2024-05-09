@@ -1,13 +1,11 @@
-package pcd.part2.VirtualThread;
+package pcd.part2.CLI.VirtualThread;
 
 import pcd.part2.MyMonitor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

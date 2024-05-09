@@ -1,4 +1,4 @@
-package pcd.part2.VertX;
+package pcd.part2.CLI.VertX;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.vertx.core.AbstractVerticle;
@@ -9,9 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;

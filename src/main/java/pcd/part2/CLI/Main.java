@@ -1,8 +1,8 @@
-package pcd.part2;
+package pcd.part2.CLI;
 
-import pcd.part2.VertX.CrawlerVertX;
-import pcd.part2.rx.CrawlerRx;
-import pcd.part2.VirtualThread.CrawlerVT;
+import pcd.part2.CLI.VertX.CrawlerVertX;
+import pcd.part2.CLI.VirtualThread.CrawlerVT;
+import pcd.part2.Report;
 
 import java.io.IOException;
 
@@ -19,8 +19,8 @@ public class Main {
         long startTime = System.currentTimeMillis();
 
         //Report report  = RecursiveCounter.getWordOccurrences(URL, wordToFind, depth);
-        Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
-        //Report report = CrawlerVertX.getWordOccurrences(URL, wordToFind, depth);
+       // Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
+        Report report = CrawlerVertX.getWordOccurrences(URL, wordToFind, depth);
 
         System.out.println("[TIME OF EXECUTION] : " + (System.currentTimeMillis()-startTime) + " Milliseconds");
 

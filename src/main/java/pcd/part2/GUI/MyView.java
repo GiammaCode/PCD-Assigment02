@@ -9,8 +9,10 @@ import java.util.Map;
 
 import static pcd.part2.GUI.vt.CrawlerVT.getWordOccurrences;
 
-public class MyView extends JFrame implements ActionListener, ModelObserver {
+public class MyView extends JFrame implements ModelObserver {
     private JTextField linkField;
+
+    private HashMap<String,Integer> result = new HashMap<>();
     private JTextField depthField;
     private JTextField wordField;
     private JButton stopButton;
@@ -46,24 +48,20 @@ public class MyView extends JFrame implements ActionListener, ModelObserver {
         wordField = new JTextField(10);
         inputPanel.add(wordField);
 
+
+
         stopButton = new JButton("Stop");
 
         countButton = new JButton("Count");
         countButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String link = linkField.getText();
-                int depth = Integer.parseInt(depthField.getText());
-                String word = wordField.getText();
+
                 try {
-                    HashMap<String,Integer> result  = getWordOccurrences(link, word, depth).getMap();
-
-                    //da mettere aposto
-                    for (Map.Entry<String, Integer> entry : result.entrySet()) {
-                        resultField.setText(entry.getKey() + " => " + entry.getValue()); // Stampa la coppia chiave-valore
-                    }
-
-
+                    String link = linkField.getText();
+                    int depth = Integer.parseInt(depthField.getText());
+                    String word = wordField.getText();
+                    result = getWordOccurrences(link, word, depth).getMap();
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -80,14 +78,10 @@ public class MyView extends JFrame implements ActionListener, ModelObserver {
         add(panel);
         setVisible(true);
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-
     @Override
     public void modelUpdated(MyModel model) {
-
+        for (Map.Entry<String, Integer> entry : result.entrySet()) {
+            resultField.setText(entry.getKey() + " => " + entry.getValue()); // Stampa la coppia chiave-valore
+        }
     }
 }

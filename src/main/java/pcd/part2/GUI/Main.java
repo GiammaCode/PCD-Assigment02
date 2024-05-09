@@ -4,11 +4,18 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Gui();
-            }
-        });
+
+        MyModel model = new MyModel();
+        MyController controller = new MyController(model);
+        MyView view = new MyView(controller);
+        model.addObserver(view);
+        view.setVisible(true);
+        new Worker(model).start();
+      //  SwingUtilities.invokeLater(new Runnable() {
+        //    @Overrid4
+        //public void run() {
+          //      new MyView();
+        //    }
+        //});
     }
 }

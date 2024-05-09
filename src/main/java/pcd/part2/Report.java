@@ -28,6 +28,10 @@ public class Report {
         }
     }
 
+    public HashMap<String,Integer> getMap(){
+        return this.result;
+    }
+
 
     /**
      * @Return void,

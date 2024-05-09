@@ -1,24 +1,23 @@
 package pcd.part2.GUI;
 
-import pcd.part2.cli.vt.RecursiveWordCountTask;
-import pcd.part2.MyMonitor;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-public class Gui extends JFrame {
+import static pcd.part2.GUI.vt.CrawlerVT.getWordOccurrences;
+
+public class MyView extends JFrame implements ActionListener, ModelObserver {
     private JTextField linkField;
     private JTextField depthField;
     private JTextField wordField;
+    private JButton stopButton;
     private JButton countButton;
     private JTextField resultField;
 
-    public Gui() {
+    public MyView(MyController controller){
         setTitle("Assigment02 PCD");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 600);
@@ -47,6 +46,8 @@ public class Gui extends JFrame {
         wordField = new JTextField(10);
         inputPanel.add(wordField);
 
+        stopButton = new JButton("Stop");
+
         countButton = new JButton("Count");
         countButton.addActionListener(new ActionListener() {
             @Override
@@ -55,7 +56,9 @@ public class Gui extends JFrame {
                 int depth = Integer.parseInt(depthField.getText());
                 String word = wordField.getText();
                 try {
-                    HashMap<String, Integer> result = getWordOccurrences(link, depth, word);
+                    HashMap<String,Integer> result  = getWordOccurrences(link, word, depth).getMap();
+
+                    //da mettere aposto
                     for (Map.Entry<String, Integer> entry : result.entrySet()) {
                         resultField.setText(entry.getKey() + " => " + entry.getValue()); // Stampa la coppia chiave-valore
                     }
@@ -78,18 +81,13 @@ public class Gui extends JFrame {
         setVisible(true);
     }
 
-    // Placeholder method for counting occurrences
-    private HashMap<String,Integer> getWordOccurrences(String link, int depth, String word) throws InterruptedException {
-        HashMap<String, Integer> result = new HashMap<>();
-        String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
-        Pattern pattern = Pattern.compile(regex);
-        MyMonitor monitor = new MyMonitor();
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
-        Thread vt = Thread.ofVirtual().unstarted(new RecursiveWordCountTask(link, word, depth, result,pattern,monitor));
-        vt.start();
-        vt.join();
-
-        return result;
     }
 
+    @Override
+    public void modelUpdated(MyModel model) {
+
+    }
 }

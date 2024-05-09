@@ -12,7 +12,9 @@ import pcd.part2.Flag;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.List;
@@ -72,8 +74,11 @@ class WordCounter extends AbstractVerticle {
         String line;
         try {
 
-            URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            URL url = new URL(entryPoint);
+            //open connection
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while ((line = bufferedReader.readLine()) != null) {
                 //System.out.println(line);
 

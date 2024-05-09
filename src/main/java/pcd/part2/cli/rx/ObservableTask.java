@@ -1,4 +1,4 @@
-package pcd.part2.CLI.rx;
+package pcd.part2.cli.rx;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;

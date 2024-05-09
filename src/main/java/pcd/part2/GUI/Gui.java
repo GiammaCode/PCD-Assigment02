@@ -1,6 +1,6 @@
 package pcd.part2.GUI;
 
-import pcd.part2.CLI.VirtualThread.RecursiveWordCountTask;
+import pcd.part2.cli.VirtualThread.RecursiveWordCountTask;
 import pcd.part2.MyMonitor;
 
 import javax.swing.*;

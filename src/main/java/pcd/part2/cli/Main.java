@@ -1,7 +1,6 @@
-package pcd.part2.CLI;
+package pcd.part2.cli;
 
-import pcd.part2.CLI.VertX.CrawlerVertX;
-import pcd.part2.CLI.VirtualThread.CrawlerVT;
+import pcd.part2.cli.VertX.CrawlerVertX;
 import pcd.part2.Report;
 
 import java.io.IOException;

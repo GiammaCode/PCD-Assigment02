@@ -1,4 +1,4 @@
-package pcd.part2.CLI.VirtualThread;
+package pcd.part2.cli.VirtualThread;
 
 import pcd.part2.MyMonitor;
 

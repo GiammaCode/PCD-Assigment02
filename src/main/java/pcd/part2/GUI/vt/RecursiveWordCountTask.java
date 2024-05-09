@@ -1,4 +1,4 @@
-package pcd.part2.GUI.VirtualThread;
+package pcd.part2.GUI.vt;
 
 import pcd.part2.MyMonitor;
 

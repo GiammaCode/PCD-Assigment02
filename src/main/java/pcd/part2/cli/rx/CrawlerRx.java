@@ -1,4 +1,4 @@
-package pcd.part2.CLI.rx;
+package pcd.part2.cli.rx;
 
 import pcd.part2.Report;
 

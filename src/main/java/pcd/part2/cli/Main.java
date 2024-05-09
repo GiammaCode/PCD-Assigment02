@@ -2,6 +2,7 @@ package pcd.part2.cli;
 
 import pcd.part2.cli.ev.CrawlerVertX;
 import pcd.part2.Report;
+import pcd.part2.cli.rx.CrawlerRx;
 import pcd.part2.cli.vt.CrawlerVT;
 
 import java.io.IOException;
@@ -18,8 +19,11 @@ public class Main {
 
         long startTime = System.currentTimeMillis();
 
-        //Report report  = CrawlerVT.getWordOccurrences(URL, wordToFind, depth);
-        Report report = CrawlerVertX.getWordOccurrences(URL, wordToFind, depth);
+        //CrawlerVT crawler = new CrawlerVT();
+        CrawlerVertX crawler = new CrawlerVertX();
+        //CrawlerRx crawler = new CrawlerRx();
+
+        Report report = crawler.getWordOccurrences(URL, wordToFind, depth);
 
         System.out.println("[TIME OF EXECUTION] : " + (System.currentTimeMillis()-startTime) + " Milliseconds");
 

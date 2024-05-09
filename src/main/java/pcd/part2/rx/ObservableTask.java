@@ -10,61 +10,96 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ObservableTask {
-    public Observable<HashMap<String, Integer>> getResult(String url, String word,
-                                                          int depth, HashMap<String, Integer> result) {
-        List<String> subLinks = new LinkedList<>();
 
-        //creo un flusso -> creo un flusso per ogni consumer (observable)
-        //per ogni uno mando la callback di crawlAndCount
-        return Observable.defer(() -> Observable.just(crawlAndCount(url, word, depth, result, subLinks)))
+    public Observable<HashMap<String, Integer>> getResult(String url, String word, int depth, HashMap<String, Integer> result) {
+        return Observable.defer(() -> Observable.just(crawlAndCount(url, word, depth, result)))
                 .subscribeOn(Schedulers.io());
-
     }
 
-    private  HashMap<String, Integer> crawlAndCount(String entrypoint, String word, int depth,
-                                                    HashMap<String, Integer> result, List<String> subLinks) {
-        String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
-        Pattern pattern = Pattern.compile(regex);
+    private HashMap<String, Integer> crawlAndCount(String entrypoint, String word, int depth, HashMap<String, Integer> result) {
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(entrypoint);
 
+        ConcurrentHashMap<String, Integer> visited = new ConcurrentHashMap<>();
+
+        /*
+        Ho sostituito la ricorsione con un ciclo while che itera fino a raggiungere la profondità desiderata.
+        Questo ciclo utilizza una coda per gestire gli URL da elaborare.
+        **/
+        while (!queue.isEmpty() && depth >= 0) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String currentUrl = queue.poll();
+                if (!visited.containsKey(currentUrl)) {
+                    visited.put(currentUrl, 1);
+                    int wordCount = crawl(currentUrl, word);
+                    result.put(currentUrl, wordCount);
+
+                    if (depth > 0) {
+                        List<String> subLinks = extractSubLinks(currentUrl);
+                        for (String sublink : subLinks) {
+                            queue.offer(sublink);
+                        }
+                    }
+                }
+            }
+            depth--;
+        }
+        return result;
+    }
+
+    /*
+    Il metodo crawl ora recupera il contenuto di un URL in modo sincrono ma può essere chiamato concorrentemente
+    da più thread grazie alla natura asincrona di RxJava.
+    * */
+    private int crawl(String url, String word) {
         int wordCount = 0;
-        String line;
-
-        StringBuilder content = new StringBuilder();
-
         try {
-            //open connection
-            URLConnection urlConnection = new URI(entrypoint).toURL().openConnection();
+            URLConnection urlConnection = new URI(url).toURL().openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
-                content.append(line).append("\n");
                 String[] words = line.split(" ");
                 for (String w : words) {
-                    wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
+                    if (w.toLowerCase().equals(word)) {
+                        wordCount++;
+                    }
                 }
             }
             bufferedReader.close();
-            result.put(entrypoint, wordCount);
-            //recursive
-            if (depth > 0) {
-                //search sublinks
-                Matcher m = pattern.matcher(content);
-                while(m.find()) {
+        } catch (Exception e) {
+            System.out.println("[" + Thread.currentThread() + "]" + " connection failed: " + url);
+        }
+        return wordCount;
+    }
+
+    /*
+    recupera anche i sottolink in modo sincrono ma può essere eseguito concorrentemente.
+    * */
+    private List<String> extractSubLinks(String url) {
+        List<String> subLinks = new LinkedList<>();
+        try {
+            URLConnection urlConnection = new URI(url).toURL().openConnection();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
+            Pattern pattern = Pattern.compile(regex);
+            while ((line = bufferedReader.readLine()) != null) {
+                Matcher m = pattern.matcher(line);
+                while (m.find()) {
                     subLinks.add(m.group());
                 }
-                depth --;
-                for (String sublink : subLinks) {
-                    crawlAndCount(sublink, word, depth, result, subLinks);
-                }
             }
+            bufferedReader.close();
+        } catch (Exception e) {
+            System.out.println("[" + Thread.currentThread() + "]" + " connection failed: " + url);
         }
-        catch (Exception e){
-            System.out.println("[" + Thread.currentThread() + "]" + " connection failed: " + entrypoint);
-        }
-
-        return result;
+        return subLinks;
     }
 }

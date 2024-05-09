@@ -4,8 +4,9 @@ import pcd.part2.MyMonitor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,9 +39,11 @@ public class RecursiveWordCountTask implements Runnable {
         String line;
         StringBuilder content = new StringBuilder();
         try {
+            URL url = new URL(entryPoint);
             //open connection
-            URLConnection urlConnection = new URI(this.entryPoint).toURL().openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             //count word occurrence
             while ((line = bufferedReader.readLine()) != null) {
                 content.append(line).append("\n");

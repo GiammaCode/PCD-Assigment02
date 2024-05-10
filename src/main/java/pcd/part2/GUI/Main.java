@@ -11,11 +11,5 @@ public class Main {
         model.addObserver(view);
         view.setVisible(true);
         new Worker(model).start();
-      //  SwingUtilities.invokeLater(new Runnable() {
-        //    @Overrid4
-        //public void run() {
-          //      new MyView();
-        //    }
-        //});
     }
 }

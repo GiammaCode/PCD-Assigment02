@@ -12,7 +12,7 @@ public class Worker extends Thread {
         while (true){
             try {
                 model.update();
-                Thread.sleep(500);
+                Thread.sleep(200);
             } catch (Exception ex){
             }
         }

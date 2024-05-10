@@ -22,7 +22,8 @@ public class CrawlerRx {
         List<String> subLinks = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(1);
 
-        crawlRecursive(entrypoint, depth)
+        crawlRecursive(entrypoint, word, depth)
+                .subscribeOn(Schedulers.io())
                 .doFinally(() -> latch.countDown()) // Chiamiamo countDown() quando il flusso è completato
                 .subscribe(links -> {
                     subLinks.addAll(links);
@@ -30,8 +31,6 @@ public class CrawlerRx {
                 });
 
         latch.await(); // Attendiamo che il flusso sia completato
-        System.out.println("lista riempita: " + subLinks.size());
-        System.out.println(subLinks);
 
         HashMap<String, Integer> mappetta = new HashMap<>();
 
@@ -60,7 +59,6 @@ public class CrawlerRx {
 
         try {
             Thread.sleep(40000);
-            System.out.println("ce qualcosa qua dentro? " + mappetta.size());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -82,6 +80,7 @@ public class CrawlerRx {
                 }
             }
             bufferedReader.close();
+            //System.out.println(Thread.currentThread() + " insert: " + link + " ==> " + wordCount );
             mapResult.put(link, wordCount);
             return new Pair<>(link, wordCount);
         } catch (Exception e) {
@@ -89,7 +88,8 @@ public class CrawlerRx {
             return null;
         }
     }
-    private Observable<List<String>> crawlRecursive(String url, int depth) {
+    private Observable<List<String>> crawlRecursive(String url, String word, int depth) {
+        System.out.println(Thread.currentThread() + "analize: " + url);
         if (depth == 0) {
             List<String> subLinks = new ArrayList<>();
             subLinks.add(url);
@@ -97,6 +97,7 @@ public class CrawlerRx {
         }
 
         return Observable.fromCallable(() -> {
+            int wordCount = 0;
             List<String> subLinks = new ArrayList<>();
             HttpURLConnection connection = null;
             try {
@@ -108,9 +109,14 @@ public class CrawlerRx {
                 String line;
                 StringBuilder content = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
-                    content.append(line);
+                    content.append(line).append("\n");
+                    String[] words = line.split(" ");
+                    for (String w : words) {
+                        wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
+                    }
                 }
                 reader.close();
+
 
                 // Estrai i link usando un'espressione regolare
                 String pageContent = content.toString();
@@ -132,13 +138,14 @@ public class CrawlerRx {
                     connection.disconnect();
                 }
             }
-
             return subLinks;
-        }).flatMap(subLinks ->
+        }).subscribeOn(Schedulers.io())
+                .flatMap(subLinks ->
                 Observable.just(subLinks)
                         .concatWith(Observable.fromIterable(subLinks)
+                                .subscribeOn(Schedulers.io())
                                 .flatMap(subLink ->
-                                        crawlRecursive(subLink, depth - 1))
+                                        crawlRecursive(subLink, word,depth - 1))
                                 .reduce(new ArrayList<>(), (acc, list) -> {
                                     acc.addAll(list);
                                     return acc;

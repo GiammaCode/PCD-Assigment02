@@ -31,10 +31,24 @@ public class SubLinker extends AbstractVerticle {
             this.entrypoint=entrypoint;
             this.depth=depth;
             this.pattern=pattern;
-
         }
 
         public void start() {
+            vertx.executeBlocking(()->{
+            for (int i=0;i<10;i++){
+                vertx.executeBlocking(()-> {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    log("io");
+                    return 10;
+                });
+            }
+            log("nuovo io");
+                return 10;
+            });
             log("started subLinkes");
             EventBus eb = this.getVertx().eventBus();
             Future<List<String>> future = getVertx().executeBlocking(() -> {
@@ -44,8 +58,7 @@ public class SubLinker extends AbstractVerticle {
                             jsonList = objectMapper.writeValueAsString(result.result());
                         } catch (JsonProcessingException e) {
                             throw new RuntimeException(e);
-                        }
-                        ;
+                        };
                         eb.publish("my-topic", jsonList);
                     }
                     );

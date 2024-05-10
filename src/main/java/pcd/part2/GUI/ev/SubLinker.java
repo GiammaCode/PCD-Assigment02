@@ -34,21 +34,21 @@ public class SubLinker extends AbstractVerticle {
         }
 
         public void start() {
-            vertx.executeBlocking(()->{
-            for (int i=0;i<10;i++){
-                vertx.executeBlocking(()-> {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    log("io");
-                    return 10;
-                });
-            }
-            log("nuovo io");
-                return 10;
-            });
+//            vertx.executeBlocking(()->{
+//            for (int i=0;i<10;i++){
+//                vertx.executeBlocking(()-> {
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    log("io");
+//                    return 10;
+//                });
+//            }
+//            log("nuovo io");
+//                return 10;
+//            });
             log("started subLinkes");
             EventBus eb = this.getVertx().eventBus();
             Future<List<String>> future = getVertx().executeBlocking(() -> {

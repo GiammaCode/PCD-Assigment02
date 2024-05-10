@@ -22,7 +22,7 @@ public class CrawlerRx {
         List<String> subLinks = new ArrayList<>();
         HashMap<String, Integer> result = new HashMap<>();
         CountDownLatch latch = new CountDownLatch(1);
-
+        depth++;
         crawlRecursive(entrypoint, word, depth, result)
                 .subscribeOn(Schedulers.io())
                 .doFinally(() -> latch.countDown()) // Chiamiamo countDown() quando il flusso è completato

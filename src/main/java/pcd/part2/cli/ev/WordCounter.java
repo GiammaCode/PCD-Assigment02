@@ -20,13 +20,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 class WordCounter extends AbstractVerticle {
     private String word;
-
     ObjectMapper objectMapper = new ObjectMapper();
-
     HashMap<String,Integer> result = new HashMap<>();
-
     Flag flag;
-
 
     public WordCounter(String word, HashMap<String,Integer> result,Flag flag){
         this.word=word;

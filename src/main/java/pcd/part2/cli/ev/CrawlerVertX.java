@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 
 public class CrawlerVertX {
-    public static Report getWordOccurrences (String entryPoint, String word, int depth) throws InterruptedException {
+    public Report getWordOccurrences (String entryPoint, String word, int depth) throws InterruptedException {
         HashMap<String, Integer> result = new HashMap<>();
         Flag flag = new Flag();
         /*
@@ -21,17 +21,11 @@ public class CrawlerVertX {
         String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
         Pattern pattern = Pattern.compile(regex);
         Vertx vertx = Vertx.vertx();
-
-      //  CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, depth,result,pattern,flag);
-       // vertx.deployVerticle(verticle);
         vertx.deployVerticle(new WordCounter(word,result,flag), res -> {
             /* deploy the second verticle only when the first has completed */
             vertx.deployVerticle(new SubLinker(entryPoint,depth,pattern));
         });
-        while(!flag.isSet()){
-         //System.out.println("im waiting");
-        }
-
+        while(!flag.isSet()){}
         return new Report(word, result);
     }
 

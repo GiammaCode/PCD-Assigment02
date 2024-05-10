@@ -1,4 +1,4 @@
-package pcd.part2.GUI.vertX;
+package pcd.part2.GUI.ev;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,40 +20,36 @@ import java.util.concurrent.atomic.AtomicInteger;
 class WordCounter extends AbstractVerticle {
     private String word;
 
+    List<String> receivedList;
+
+    String receivedJsonList;
+
     ObjectMapper objectMapper = new ObjectMapper();
 
-    HashMap<String,Integer> result = new HashMap<>();
+    HashMap<String,Integer> result;
 
-    Flag flag;
-
-
-    public WordCounter(String word, HashMap<String,Integer> result,Flag flag){
+    public WordCounter(String word, HashMap<String,Integer> result){
         this.word=word;
         this.result=result;
-        this.flag=flag;
     }
 
     public void start(Promise<Void> startPromise) {
         log("started word counter");
         EventBus eb = this.getVertx().eventBus();
         eb.consumer("my-topic", message -> {
-            String receivedJsonList = (String) message.body();
-            List<String> receivedList;
+            receivedJsonList = (String) message.body();
+
             try {
                 receivedList = objectMapper.readValue(receivedJsonList, new TypeReference<List<String>>(){});
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-            int size = receivedList.size();
-            AtomicInteger count= new AtomicInteger();
             for (String element : receivedList) {
                 Future<Integer> future = getVertx().executeBlocking(() -> {
+                    log(element);
                     return countWord(element,word);
                 }).onComplete((nWord)->{
-                        count.getAndIncrement();
                         result.put(element,nWord.result());
-                        if (count.get() == size)
-                            flag.set();
                 });
             }
         });
@@ -70,6 +66,7 @@ class WordCounter extends AbstractVerticle {
         int wordCount = 0;
         String line;
         try {
+
 
             URL url = new URL(entryPoint);
             //open connection
@@ -90,6 +87,7 @@ class WordCounter extends AbstractVerticle {
         } catch (Exception e) {
             System.out.println("Impossibile connettersi a " + entryPoint);
         }
+        log(String.valueOf(wordCount));
         return wordCount;
 
     }

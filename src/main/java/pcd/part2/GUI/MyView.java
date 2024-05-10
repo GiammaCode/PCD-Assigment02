@@ -1,7 +1,7 @@
 package pcd.part2.GUI;
 
-import pcd.part2.cli.vt.RecursiveWordCountTask;
-import pcd.part2.MyMonitor;
+import pcd.part2.GUI.vt.CrawlerVT;
+import pcd.part2.GUI.ev.CrawlerVertX;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,16 +9,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-public class Gui extends JFrame {
+import static pcd.part2.GUI.vt.CrawlerVT.getWordOccurrences;
+
+public class MyView extends JFrame implements ModelObserver{
     private JTextField linkField;
+    private String test = "";
+
+    CrawlerVertX crow = new CrawlerVertX();
+
+    private HashMap<String,Integer> result = new HashMap<>();
     private JTextField depthField;
     private JTextField wordField;
+    private JButton stopButton;
     private JButton countButton;
-    private JTextField resultField;
+    private JTextArea resultField;
 
-    public Gui() {
+    public MyView(MyController controller){
         setTitle("Assigment02 PCD");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 600);
@@ -32,7 +39,7 @@ public class Gui extends JFrame {
         JLabel linkLabel = new JLabel("Link:");
         inputPanel.add(linkLabel);
 
-        linkField = new JTextField(30);
+        linkField = new JTextField("https://www.akwabaforli.com/",30);
         inputPanel.add(linkField);
 
         JLabel depthLabel = new JLabel("Depth:");
@@ -47,49 +54,46 @@ public class Gui extends JFrame {
         wordField = new JTextField(10);
         inputPanel.add(wordField);
 
+
+
+        stopButton = new JButton("Stop");
+
         countButton = new JButton("Count");
+
+
         countButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String link = linkField.getText();
-                int depth = Integer.parseInt(depthField.getText());
-                String word = wordField.getText();
+                CrawlerVertX crow = new CrawlerVertX();
                 try {
-                    HashMap<String, Integer> result = getWordOccurrences(link, depth, word);
-                    for (Map.Entry<String, Integer> entry : result.entrySet()) {
-                        resultField.setText(entry.getKey() + " => " + entry.getValue()); // Stampa la coppia chiave-valore
-                    }
-
-
+                    //controller.processEvent(e.getActionCommand());
+                    String link = linkField.getText();
+                    int depth = Integer.parseInt(depthField.getText());
+                    String word = wordField.getText();
+                    crow.getWordOccurrences(link,word,depth);
+                    result = crow.getMap();
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
             }
         });
         inputPanel.add(countButton);
-
         panel.add(inputPanel, BorderLayout.NORTH);
-
-        resultField = new JTextField();
+        resultField = new JTextArea();
+        //resultField.setSize(300,200);
         resultField.setEditable(false);
-        panel.add(resultField, BorderLayout.CENTER);
-
+        JScrollPane scrollPane = new JScrollPane(resultField);
+        panel.add(scrollPane,BorderLayout.CENTER);
         add(panel);
         setVisible(true);
     }
-
-    // Placeholder method for counting occurrences
-    private HashMap<String,Integer> getWordOccurrences(String link, int depth, String word) throws InterruptedException {
-        HashMap<String, Integer> result = new HashMap<>();
-        String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
-        Pattern pattern = Pattern.compile(regex);
-        MyMonitor monitor = new MyMonitor();
-
-        Thread vt = Thread.ofVirtual().unstarted(new RecursiveWordCountTask(link, word, depth, result,pattern,monitor));
-        vt.start();
-        vt.join();
-
-        return result;
+    @Override
+    public void modelUpdated(MyModel model) throws InterruptedException {
+        for (Map.Entry<String, Integer> entry : result.entrySet()) {
+            Thread.sleep(100);
+            test =  test + "\n"+ entry.getKey() + " => " + entry.getValue();
+            result.remove(entry.getKey());
+            resultField.setText(test); // Stampa la coppia chiave-valore
+        }
     }
-
 }

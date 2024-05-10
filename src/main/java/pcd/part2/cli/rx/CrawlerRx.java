@@ -23,13 +23,11 @@ public class CrawlerRx {
         HashMap<String, Integer> result = new HashMap<>();
         CountDownLatch latch = new CountDownLatch(1);
         depth++;
+
         crawlRecursive(entrypoint, word, depth, result)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())  //fa scegliere allo scheduler I/O la gestione dei Thread da un pool
                 .doFinally(() -> latch.countDown()) // Chiamiamo countDown() quando il flusso è completato
-                .subscribe(links -> {
-                    subLinks.addAll(links);
-                    //System.out.println(myList);
-                });
+                .subscribe();
 
         latch.await(); // Attendiamo che il flusso sia completato
         System.out.println("finished");
@@ -39,9 +37,7 @@ public class CrawlerRx {
 
     private Observable<List<String>> crawlRecursive(String url, String word, int depth, HashMap<String, Integer> result) {
         if (depth == 0) {
-            List<String> subLinks = new ArrayList<>();
-            subLinks.add(url);
-            return Observable.just(subLinks);
+            return Observable.just(new ArrayList<>());
         }
 
         return Observable.fromCallable(() -> {

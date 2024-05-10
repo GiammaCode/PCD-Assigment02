@@ -14,6 +14,10 @@ import static pcd.part2.GUI.vt.CrawlerVT.getWordOccurrences;
 
 public class MyView extends JFrame implements ModelObserver{
     private JTextField linkField;
+    private String test = "";
+
+    CrawlerVertX crow = new CrawlerVertX();
+
     private HashMap<String,Integer> result = new HashMap<>();
     private JTextField depthField;
     private JTextField wordField;
@@ -84,10 +88,11 @@ public class MyView extends JFrame implements ModelObserver{
         setVisible(true);
     }
     @Override
-    public void modelUpdated(MyModel model) {
-        String test = "";
+    public void modelUpdated(MyModel model) throws InterruptedException {
         for (Map.Entry<String, Integer> entry : result.entrySet()) {
-            test = test +"\n"+ entry.getKey() + " => " + entry.getValue();
+            Thread.sleep(100);
+            test =  test + "\n"+ entry.getKey() + " => " + entry.getValue();
+            result.remove(entry.getKey());
             resultField.setText(test); // Stampa la coppia chiave-valore
         }
     }

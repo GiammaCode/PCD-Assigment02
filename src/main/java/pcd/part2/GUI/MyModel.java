@@ -13,7 +13,7 @@ public class MyModel {
         observers = new ArrayList<ModelObserver>();
     }
 
-    public synchronized void update(){
+    public synchronized void update() throws InterruptedException {
         notifyObservers();
     }
 
@@ -26,7 +26,7 @@ public class MyModel {
 
     }
 
-    private void notifyObservers(){
+    private void notifyObservers() throws InterruptedException {
         for (ModelObserver obs: observers){
             obs.modelUpdated(this);
         }

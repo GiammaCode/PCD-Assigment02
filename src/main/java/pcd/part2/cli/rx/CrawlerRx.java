@@ -5,94 +5,101 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import pcd.part2.Report;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CrawlerRx {
-    public Report getWordOccurrences(String entrypoint, String word, int depth){
+    public Report getWordOccurrences(String entrypoint, String word, int depth) throws InterruptedException {
         List<String> subLinks = new ArrayList<>();
-        getSubLinks(entrypoint,depth,subLinks);
+        HashMap<String, Integer> result = new HashMap<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        depth++;
+        crawlRecursive(entrypoint, word, depth, result)
+                .subscribeOn(Schedulers.io())
+                .doFinally(() -> latch.countDown()) // Chiamiamo countDown() quando il flusso è completato
+                .subscribe(links -> {
+                    subLinks.addAll(links);
+                    //System.out.println(myList);
+                });
 
-        Observable<Pair<String, Integer>> observable = Observable
-                .fromIterable(subLinks)
-                .concatMap(link -> Observable
-                        .just(link)
-                        .delay(200, TimeUnit.MILLISECONDS)
-                        .map(linkToCheck -> searchWordInLink(linkToCheck, word))
-                        .subscribeOn(Schedulers.io())
-                );
+        latch.await(); // Attendiamo che il flusso sia completato
+        System.out.println("finished");
 
-        HashMap<String, Integer> map = new HashMap<>();
-        observable.subscribe(
-                result -> {
-                    if (result != null) {
-                        map.put(result.getKey(), result.getValue());
-                        //System.out.println(Thread.currentThread() + " Link: " + result.getKey() + ", Occorrenze di " + word + " " + result.getValue());
-                    }
-                },
-                Throwable::printStackTrace,
-                () -> {
-                    System.out.println("Ricerca completata.");
-                }
-        );
-
-        try {
-            Thread.sleep(20000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return new Report(word, map);
+        return new Report(word, result);
     }
 
-    private static Pair<String, Integer> searchWordInLink(String link, String wordToFind) {
-        int wordCount = 0;
-        try {
-            URLConnection urlConnection = new URI(link).toURL().openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] words = line.split(" ");
-                for (String w : words) {
-                    if (w.toLowerCase().equals(wordToFind)) {
-                        wordCount++;
-                    }
-                }
-            }
-            bufferedReader.close();
-            return new Pair<>(link, wordCount);
-        } catch (Exception e) {
-            System.out.println("[" + Thread.currentThread() + "]" + " connection failed: " + link);
-            return null;
+    private Observable<List<String>> crawlRecursive(String url, String word, int depth, HashMap<String, Integer> result) {
+        if (depth == 0) {
+            List<String> subLinks = new ArrayList<>();
+            subLinks.add(url);
+            return Observable.just(subLinks);
         }
-    }
-    private void getSubLinks(String entryPoint, int depth, List<String> subLinks) {
-        String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
-        Pattern pattern = Pattern.compile(regex);
-        String line;
-        StringBuilder content = new StringBuilder();
-        try {
-            URLConnection urlConnection = new URI(entryPoint).toURL().openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            while ((line = bufferedReader.readLine()) != null) {
-                //System.out.println(line);
-                if(depth>0) {
+
+        return Observable.fromCallable(() -> {
+            String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
+            Pattern pattern = Pattern.compile(regex);
+            int wordCount = 0;
+
+            List<String> subLinks = new ArrayList<>();
+            HttpURLConnection connection = null;
+            try {
+                URL linkUrl = new URL(url);
+                connection = (HttpURLConnection) linkUrl.openConnection();
+                connection.setRequestMethod("GET");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                StringBuilder content = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
                     content.append(line).append("\n");
+                    String[] words = line.split(" ");
+                    for (String w : words) {
+                        wordCount = w.toLowerCase().equals(word) ? wordCount + 1 : wordCount;
+                    }
+                }
+                //TO DO: è un operazione critica ????
+                result.put(url,wordCount);
+                //System.out.println(Thread.currentThread() + " analyzed: " + url + " count: " + wordCount + " depth: " + depth);
+                reader.close();
+
+                // Estrai i link usando un'espressione regolare
+                String pageContent = content.toString();
+                int index = 0;
+                //search sublinks
+                Matcher m = pattern.matcher(content);
+                while(m.find()) {
+                    subLinks.add(m.group());
+                }
+            }  catch (Exception e) {
+                System.out.println("[" + Thread.currentThread() + "]" + " connection failed: " + url);
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
                 }
             }
-            bufferedReader.close();
-            subLinks.add(entryPoint);
-            Matcher m = pattern.matcher(content);
-            while (m.find()) {
-                getSubLinks(m.group(),depth--,subLinks);
-            }
-        } catch (Exception e) {
-            System.out.println("Impossibile connettersi a " + entryPoint);
-        }
+            return subLinks;
+        }).subscribeOn(Schedulers.io())
+                .flatMap(subLinks ->
+                Observable.just(subLinks)
+                        .concatWith(Observable.fromIterable(subLinks)
+                                .subscribeOn(Schedulers.io())
+                                .flatMap(subLink ->
+                                        crawlRecursive(subLink, word,depth - 1, result))
+                                .reduce(new ArrayList<>(), (acc, list) -> {
+                                    acc.addAll(list);
+                                    return acc;
+                                })
+                        )
+        );
     }
 
 }

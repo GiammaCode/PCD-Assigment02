@@ -19,6 +19,8 @@ dependencies {
     implementation("io.vertx:vertx-web-client:4.5.7")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4.1")
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
+
+    implementation ("org.jsoup:jsoup:1.14.3")
 }
 
 tasks.test {

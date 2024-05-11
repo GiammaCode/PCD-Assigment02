@@ -1,8 +1,6 @@
 package pcd.part2.GUI;
 
-import pcd.part2.GUI.vt.CrawlerVT;
-import pcd.part2.GUI.ev.CrawlerVertX;
-import pcd.part2.cli.rx.CrawlerRx;
+import pcd.part2.Crowler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,17 +9,10 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import static pcd.part2.GUI.vt.CrawlerVT.getWordOccurrences;
-
 public class MyView extends JFrame implements ModelObserver{
     private JTextField linkField;
     private String test = "";
-
-    CrawlerVertX crow = new CrawlerVertX();
-     //CrawlerVT crow= new CrawlerVT();
-    // CrawlerRx crow = new CrawlerRx();
-
-
+   Crowler crowler;
     private HashMap<String,Integer> result = new HashMap<>();
     private JTextField depthField;
     private JTextField wordField;
@@ -29,7 +20,8 @@ public class MyView extends JFrame implements ModelObserver{
     private JButton countButton;
     private JTextArea resultField;
 
-    public MyView(MyController controller){
+    public MyView(MyController controller, Crowler crowler){
+        this.crowler =crowler;
         setTitle("Assigment02 PCD");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -59,7 +51,6 @@ public class MyView extends JFrame implements ModelObserver{
         inputPanel.add(wordField);
 
 
-
         stopButton = new JButton("Stop");
 
         countButton = new JButton("Count");
@@ -73,8 +64,8 @@ public class MyView extends JFrame implements ModelObserver{
                     String link = linkField.getText();
                     int depth = Integer.parseInt(depthField.getText());
                     String word = wordField.getText();
-                    crow.getWordOccurrences(link,word,depth);
-                    result = crow.getMap();
+                    crowler.getWordOccurrences(link,word,depth);
+                    result = crowler.getMap();
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -86,7 +77,7 @@ public class MyView extends JFrame implements ModelObserver{
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            crowler.stop();
             }
         });
         inputPanel.add(stopButton);
@@ -102,10 +93,10 @@ public class MyView extends JFrame implements ModelObserver{
     }
     @Override
     public void modelUpdated(MyModel model) {
-        for (Map.Entry<String, Integer> entry : result.entrySet()) {
-            test =  test + "\n"+ entry.getKey() + " => " + entry.getValue();
-            result.remove(entry.getKey());
-            resultField.setText(test); // Stampa la coppia chiave-valore
-        }
+                    for (Map.Entry<String, Integer> entry : result.entrySet()) {
+                        test = test + "\n" + entry.getKey() + " => " + entry.getValue();
+                        result.remove(entry.getKey());
+                        resultField.setText(test); // Stampa la coppia chiave-valore
+                    }
     }
 }

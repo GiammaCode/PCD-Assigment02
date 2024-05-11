@@ -1,6 +1,7 @@
 package pcd.part2.GUI.ev;
 
 import io.vertx.core.Vertx;
+import pcd.part2.Crowler;
 import pcd.part2.Flag;
 import pcd.part2.Report;
 
@@ -8,7 +9,8 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 
-public class CrawlerVertX {
+public class CrawlerVertX implements Crowler {
+    Flag stopFlag= new Flag();
     private final HashMap<String, Integer> result = new HashMap<>();
 
     public void getWordOccurrences(String entryPoint, String word, int depth) throws InterruptedException {
@@ -24,7 +26,7 @@ public class CrawlerVertX {
         Vertx vertx = Vertx.vertx();
         //  CountWordVerticle verticle = new CountWordVerticle(entryPoint, word, depth,result,pattern,flag);
         // vertx.deployVerticle(verticle);
-        vertx.deployVerticle(new WordCounter(word, result), res -> {
+        vertx.deployVerticle(new WordCounter(word, result,stopFlag), res -> {
             /* deploy the second verticle only when the first has completed */
             vertx.deployVerticle(new SubLinker(entryPoint, depth, pattern));
         });
@@ -33,4 +35,7 @@ public class CrawlerVertX {
         return this.result;
     }
 
+    public void stop() {
+        stopFlag.set();
+    }
 }

@@ -3,6 +3,7 @@ package pcd.part2.GUI.ev;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reactivex.rxjava3.core.Flowable;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -30,7 +31,10 @@ class WordCounter extends AbstractVerticle {
 
     HashMap<String,Integer> result;
 
-    public WordCounter(String word, HashMap<String,Integer> result){
+    Flag stopFlag;
+
+    public WordCounter(String word, HashMap<String,Integer> result,Flag stopFlag){
+        this.stopFlag=stopFlag;
         this.word=word;
         this.result=result;
     }
@@ -46,12 +50,12 @@ class WordCounter extends AbstractVerticle {
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-            ExecutorService executorService = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() + 1);
             for (String element : receivedList) {
-                Future<Integer> future = getVertx().executeBlocking(() -> countWord(element,word)).onComplete((nWord)->{
-                        result.put(element,nWord.result());
-                });
-            }
+                if(!stopFlag.isSet()) {
+                    Future<Integer> future = getVertx().executeBlocking(() -> countWord(element, word)).onComplete((nWord) -> {
+                        result.put(element, nWord.result());
+                    });
+                }}
         });
         log("waiting for links");
         startPromise.complete();

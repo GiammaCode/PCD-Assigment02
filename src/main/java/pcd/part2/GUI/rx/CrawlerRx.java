@@ -2,6 +2,7 @@ package pcd.part2.GUI.rx;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import pcd.part2.Crowler;
 import pcd.part2.Report;
 
 import java.io.BufferedReader;
@@ -15,10 +16,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CrawlerRx {
+public class CrawlerRx implements Crowler {
     HashMap<String, Integer> result = new HashMap<>();
 
-    public Report getWordOccurrences(String entrypoint, String word, int depth) throws InterruptedException {
+    public void getWordOccurrences(String entrypoint, String word, int depth) throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         depth++;
 
@@ -30,7 +31,7 @@ public class CrawlerRx {
         latch.await(); // Attendiamo che il flusso sia completato
         System.out.println("finished");
 
-        return new Report(word, result);
+        //return new Report(word, result);
     }
 
     private Observable<List<String>> crawlRecursive(String url, String word, int depth, HashMap<String, Integer> result) {
@@ -98,5 +99,10 @@ public class CrawlerRx {
 
     public HashMap<String,Integer> getMap(){
         return result;
+    }
+
+    @Override
+    public void stop() {
+
     }
 }

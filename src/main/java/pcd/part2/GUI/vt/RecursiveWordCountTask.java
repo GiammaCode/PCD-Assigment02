@@ -1,5 +1,6 @@
 package pcd.part2.GUI.vt;
 
+import pcd.part2.Flag;
 import pcd.part2.MyMonitor;
 
 import java.io.BufferedReader;
@@ -23,13 +24,16 @@ public class RecursiveWordCountTask implements Runnable {
     Pattern pattern;
     private HashMap<String, Integer> result;
 
-    public RecursiveWordCountTask(String entryPoint, String word, int depth, HashMap<String, Integer> result, Pattern pattern, MyMonitor monitor) {
+    Flag flag;
+
+    public RecursiveWordCountTask(String entryPoint, String word, int depth, HashMap<String, Integer> result, Pattern pattern, MyMonitor monitor, Flag flag) {
         this.entryPoint = entryPoint;
         this.monitor=monitor;
         this.word = word;
         this.depth = depth;
         this.result = result;
         this.pattern = pattern;
+        this.flag=flag;
     }
 
     @Override
@@ -62,10 +66,12 @@ public class RecursiveWordCountTask implements Runnable {
                 }
                 depth = this.monitor.syncDec(depth);
                 for (String sublink : subLinks) {
-                    Thread vt = Thread.ofVirtual()
-                            .unstarted(new RecursiveWordCountTask(sublink, this.word, this.depth, this.result, this.pattern,this.monitor));
-                    this.threads.add(vt);
-                    vt.start();
+                    if(!flag.isSet()) {
+                        Thread vt = Thread.ofVirtual()
+                                .unstarted(new RecursiveWordCountTask(sublink, this.word, this.depth, this.result, this.pattern, this.monitor, flag));
+                        this.threads.add(vt);
+                        vt.start();
+                    }
                 }
                 for (Thread thread : this.threads) {
                     thread.join();

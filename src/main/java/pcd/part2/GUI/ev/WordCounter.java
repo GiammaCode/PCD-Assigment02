@@ -15,6 +15,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class WordCounter extends AbstractVerticle {
@@ -44,11 +46,9 @@ class WordCounter extends AbstractVerticle {
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
+            ExecutorService executorService = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() + 1);
             for (String element : receivedList) {
-                Future<Integer> future = getVertx().executeBlocking(() -> {
-                    log(element);
-                    return countWord(element,word);
-                }).onComplete((nWord)->{
+                Future<Integer> future = getVertx().executeBlocking(() -> countWord(element,word)).onComplete((nWord)->{
                         result.put(element,nWord.result());
                 });
             }
@@ -87,7 +87,6 @@ class WordCounter extends AbstractVerticle {
         } catch (Exception e) {
             System.out.println("Impossibile connettersi a " + entryPoint);
         }
-        log(String.valueOf(wordCount));
         return wordCount;
 
     }

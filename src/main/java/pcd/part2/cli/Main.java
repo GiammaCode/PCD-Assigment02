@@ -20,8 +20,8 @@ public class Main {
         long startTime = System.currentTimeMillis();
 
         //CrawlerVT crawler = new CrawlerVT();
-        //CrawlerVertX crawler = new CrawlerVertX();
-        CrawlerRx crawler = new CrawlerRx();
+        CrawlerVertX crawler = new CrawlerVertX();
+        //CrawlerRx crawler = new CrawlerRx();
 
 
         Report report = crawler.getWordOccurrences(URL, wordToFind, depth);

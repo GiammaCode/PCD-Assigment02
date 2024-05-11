@@ -77,7 +77,7 @@ public class SubLinker extends AbstractVerticle {
 
             if(depth>0) {
                 // Creiamo un ExecutorService per eseguire i compiti in modo parallelo
-                ExecutorService executorService = Executors.newFixedThreadPool(10);
+                ExecutorService executorService = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() + 1);
                 Matcher m = this.pattern.matcher(content);
                 while (m.find()) subLinks.add(m.group());
                 for (String link : subLinks) {

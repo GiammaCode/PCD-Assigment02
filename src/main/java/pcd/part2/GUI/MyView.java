@@ -2,6 +2,7 @@ package pcd.part2.GUI;
 
 import pcd.part2.GUI.vt.CrawlerVT;
 import pcd.part2.GUI.ev.CrawlerVertX;
+import pcd.part2.cli.rx.CrawlerRx;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +18,9 @@ public class MyView extends JFrame implements ModelObserver{
     private String test = "";
 
     CrawlerVertX crow = new CrawlerVertX();
+     //CrawlerVT crow= new CrawlerVT();
+    // CrawlerRx crow = new CrawlerRx();
+
 
     private HashMap<String,Integer> result = new HashMap<>();
     private JTextField depthField;
@@ -64,8 +68,6 @@ public class MyView extends JFrame implements ModelObserver{
         countButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //CrawlerVertX crow = new CrawlerVertX();
-                CrawlerVertX crow = new CrawlerVertX();
                 try {
                     //controller.processEvent(e.getActionCommand());
                     String link = linkField.getText();
@@ -89,9 +91,8 @@ public class MyView extends JFrame implements ModelObserver{
         setVisible(true);
     }
     @Override
-    public void modelUpdated(MyModel model) throws InterruptedException {
+    public void modelUpdated(MyModel model) {
         for (Map.Entry<String, Integer> entry : result.entrySet()) {
-            Thread.sleep(100);
             test =  test + "\n"+ entry.getKey() + " => " + entry.getValue();
             result.remove(entry.getKey());
             resultField.setText(test); // Stampa la coppia chiave-valore

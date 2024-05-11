@@ -3,6 +3,8 @@ package pcd.part2.cli;
 import pcd.part2.Report;
 import pcd.part2.cli.ev.CrawlerVertX;
 import pcd.part2.cli.rx.CrawlerRx;
+import pcd.part2.cli.vt.CrawlerVT;
+
 import java.io.IOException;
 
 public class Main {
@@ -17,8 +19,8 @@ public class Main {
 
         long startTime = System.currentTimeMillis();
 
-        //CrawlerVT crawler = new CrawlerVT();
-        CrawlerVertX crawler = new CrawlerVertX();
+        CrawlerVT crawler = new CrawlerVT();
+        //CrawlerVertX crawler = new CrawlerVertX();
         //CrawlerRx crawler = new CrawlerRx();
 
 

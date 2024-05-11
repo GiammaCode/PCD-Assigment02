@@ -14,6 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class SubLinker extends AbstractVerticle {
@@ -37,9 +39,8 @@ public class SubLinker extends AbstractVerticle {
         public void start() {
             log("started subLinkes");
             EventBus eb = this.getVertx().eventBus();
-            Future<List<String>> future = getVertx().executeBlocking(() -> {
-                return  subLinks(entrypoint,depth,subLinks);
-                    }).onComplete((result)-> {
+            Future<List<String>> future = getVertx().executeBlocking(
+                    () -> subLinks(entrypoint,depth,subLinks)).onComplete((result)-> {
                         try {
                             jsonList = objectMapper.writeValueAsString(result.result());
                         } catch (JsonProcessingException e) {
@@ -57,35 +58,37 @@ public class SubLinker extends AbstractVerticle {
         }
 
     private List<String> subLinks(String entryPoint, int depth, List<String> subLinks) {
+            recursiveSearchSubLinks(entryPoint,depth,subLinks);
+            return subLinks;
+    }
 
+    private void recursiveSearchSubLinks(String myLink, int depth, List<String> subLinks){
         String line;
         StringBuilder content = new StringBuilder();
         try {
-
-            URL url = new URL(entryPoint);
+            URL url = new URL(myLink);
             //open connection
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            while ((line = bufferedReader.readLine()) != null) {
-                //System.out.println(line);
-                if(depth>0) {
-                    content.append(line).append("\n");
-                }
-            }
+            while ((line = bufferedReader.readLine()) != null) content.append(line).append("\n");
             bufferedReader.close();
+            subLinks.add(myLink);
 
-            subLinks.add(entryPoint);
-
-            //MA SE IO HO MESSO hasToFindSublink = false analizzo una content vuoto? che succede?
-            Matcher m = this.pattern.matcher(content);
-            while (m.find()) {
-                subLinks(m.group(),depth--,subLinks);
+            if(depth>0) {
+                // Creiamo un ExecutorService per eseguire i compiti in modo parallelo
+                ExecutorService executorService = Executors.newFixedThreadPool(10);
+                Matcher m = this.pattern.matcher(content);
+                while (m.find()) subLinks.add(m.group());
+                for (String link : subLinks) {
+                    executorService.execute(() -> subLinks(link, depth - 1, subLinks));
+                }
+                // Ferma l'ExecutorService dopo che tutti i compiti sono stati completati
+                executorService.shutdown();
             }
 
         } catch (Exception e) {
-            System.out.println("Impossibile connettersi a " + entryPoint);
+            System.out.println("Impossibile connettersi a " + myLink);
         }
-        return subLinks;
     }
     }

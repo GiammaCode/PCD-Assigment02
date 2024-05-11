@@ -64,6 +64,7 @@ public class MyView extends JFrame implements ModelObserver{
         countButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //CrawlerVertX crow = new CrawlerVertX();
                 CrawlerVertX crow = new CrawlerVertX();
                 try {
                     //controller.processEvent(e.getActionCommand());

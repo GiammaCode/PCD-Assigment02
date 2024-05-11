@@ -7,10 +7,8 @@ import java.util.List;
 public class MyModel {
     private List<ModelObserver> observers;
 
-    private HashMap<String,Integer> map = new HashMap<>();
-
     public MyModel(){
-        observers = new ArrayList<ModelObserver>();
+        observers = new ArrayList<>();
     }
 
     public synchronized void update() throws InterruptedException {

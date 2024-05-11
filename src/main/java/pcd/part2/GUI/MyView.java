@@ -32,7 +32,7 @@ public class MyView extends JFrame implements ModelObserver{
     public MyView(MyController controller){
         setTitle("Assigment02 PCD");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 600);
+        setSize(800, 600);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -82,6 +82,16 @@ public class MyView extends JFrame implements ModelObserver{
         });
         inputPanel.add(countButton);
         panel.add(inputPanel, BorderLayout.NORTH);
+
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        inputPanel.add(stopButton);
+        panel.add(inputPanel, BorderLayout.NORTH);
+
         resultField = new JTextArea();
         //resultField.setSize(300,200);
         resultField.setEditable(false);

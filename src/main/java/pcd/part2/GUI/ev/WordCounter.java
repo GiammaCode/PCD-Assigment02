@@ -51,11 +51,14 @@ class WordCounter extends AbstractVerticle {
                 throw new RuntimeException(e);
             }
             for (String element : receivedList) {
-                if(!stopFlag.isSet()) {
+
+                    System.out.println(stopFlag.isSet());
                     Future<Integer> future = getVertx().executeBlocking(() -> countWord(element, word)).onComplete((nWord) -> {
-                        result.put(element, nWord.result());
+                        if(!stopFlag.isSet()) {
+                            result.put(element, nWord.result());
+                        }
                     });
-                }}
+                }
         });
         log("waiting for links");
         startPromise.complete();

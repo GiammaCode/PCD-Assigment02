@@ -105,4 +105,9 @@ public class CrawlerRx implements Crowler {
     public void stop() {
 
     }
+
+    @Override
+    public void reset() {
+
+    }
 }

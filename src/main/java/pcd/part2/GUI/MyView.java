@@ -60,6 +60,7 @@ public class MyView extends JFrame implements ModelObserver{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    crowler.reset();
                     //controller.processEvent(e.getActionCommand());
                     String link = linkField.getText();
                     int depth = Integer.parseInt(depthField.getText());
@@ -77,7 +78,8 @@ public class MyView extends JFrame implements ModelObserver{
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            crowler.stop();
+                System.out.println("pressed");
+                crowler.stop();
             }
         });
         inputPanel.add(stopButton);

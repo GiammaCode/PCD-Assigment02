@@ -37,5 +37,11 @@ public class CrawlerVertX implements Crowler {
 
     public void stop() {
         stopFlag.set();
+        System.out.println("stoppped");
+    }
+
+    @Override
+    public void reset() {
+        stopFlag.reset();
     }
 }

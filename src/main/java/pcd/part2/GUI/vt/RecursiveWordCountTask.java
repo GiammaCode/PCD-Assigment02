@@ -56,7 +56,10 @@ public class RecursiveWordCountTask implements Runnable {
                 }
             }
             bufferedReader.close();
-            this.monitor.syncPut(result,this.entryPoint, wordCount);
+            if(!flag.isSet()) {
+                this.monitor.syncPut(result, this.entryPoint, wordCount);
+            }
+
             //start recursive part
             if (this.depth > 0) {
                 //search sublinks
@@ -65,16 +68,20 @@ public class RecursiveWordCountTask implements Runnable {
                     this.subLinks.add(m.group());
                 }
                 depth = this.monitor.syncDec(depth);
-                for (String sublink : subLinks) {
-                    if(!flag.isSet()) {
+                if(!flag.isSet()) {
+
+                    for (String sublink : subLinks) {
+
                         Thread vt = Thread.ofVirtual()
                                 .unstarted(new RecursiveWordCountTask(sublink, this.word, this.depth, this.result, this.pattern, this.monitor, flag));
                         this.threads.add(vt);
                         vt.start();
+
                     }
-                }
-                for (Thread thread : this.threads) {
-                    thread.join();
+
+                    for (Thread thread : this.threads) {
+                        thread.join();
+                    }
                 }
             }
 

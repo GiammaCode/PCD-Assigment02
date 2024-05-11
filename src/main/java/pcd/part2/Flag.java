@@ -12,4 +12,8 @@ public class Flag {
     public synchronized boolean isSet(){
         return flag;
     }
+
+    public void reset() {
+        flag=false;
+    }
 }

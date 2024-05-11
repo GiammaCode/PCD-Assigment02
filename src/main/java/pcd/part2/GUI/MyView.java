@@ -61,7 +61,6 @@ public class MyView extends JFrame implements ModelObserver{
             public void actionPerformed(ActionEvent e) {
                 try {
                     crowler.reset();
-                    //controller.processEvent(e.getActionCommand());
                     String link = linkField.getText();
                     int depth = Integer.parseInt(depthField.getText());
                     String word = wordField.getText();
@@ -78,7 +77,6 @@ public class MyView extends JFrame implements ModelObserver{
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("pressed");
                 crowler.stop();
             }
         });
@@ -86,7 +84,6 @@ public class MyView extends JFrame implements ModelObserver{
         panel.add(inputPanel, BorderLayout.NORTH);
 
         resultField = new JTextArea();
-        //resultField.setSize(300,200);
         resultField.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(resultField);
         panel.add(scrollPane,BorderLayout.CENTER);

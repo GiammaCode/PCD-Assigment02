@@ -1,26 +1,24 @@
-package pcd.part2.cli.rx;
+package pcd.part2.GUI.rx;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import pcd.part2.Report;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CrawlerRx {
+    HashMap<String, Integer> result = new HashMap<>();
+
     public Report getWordOccurrences(String entrypoint, String word, int depth) throws InterruptedException {
-        List<String> subLinks = new ArrayList<>();
-        HashMap<String, Integer> result = new HashMap<>();
         CountDownLatch latch = new CountDownLatch(1);
         depth++;
 
@@ -98,4 +96,7 @@ public class CrawlerRx {
         );
     }
 
+    public HashMap<String,Integer> getMap(){
+        return result;
+    }
 }

@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-       // String URL = "https://scuola.eutampieri.eu/";
+        //String URL = "https://scuola.eutampieri.eu/";
         String URL = "https://www.rugbyforli.net/";
         String wordToFind = "il";
         //depth = 0 to analyze only entrypoint page
@@ -19,9 +19,9 @@ public class Main {
 
         long startTime = System.currentTimeMillis();
 
-        CrawlerVT crawler = new CrawlerVT();
+        //CrawlerVT crawler = new CrawlerVT();
         //CrawlerVertX crawler = new CrawlerVertX();
-        //CrawlerRx crawler = new CrawlerRx();
+        CrawlerRx crawler = new CrawlerRx();
 
 
         Report report = crawler.getWordOccurrences(URL, wordToFind, depth);
@@ -31,7 +31,6 @@ public class Main {
         //Decomment to get a report.txt
         //report.getTxtReport();
         report.logResult();
-
 
     }
 }

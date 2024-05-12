@@ -37,7 +37,7 @@ public abstract class AbstractSimulation {
 		startWallTime = System.currentTimeMillis();
 		
 		Semaphore done = new Semaphore(0);
-		ExecutoStepService executorService = new ExecutoStepService(this, nWorkers, nSteps, stopFlag, done, syncWithTime);
+		ExecutorStepService executorService = new ExecutorStepService(this, nWorkers, nSteps, stopFlag, done, syncWithTime);
 		executorService.compute();
 		
 		try {

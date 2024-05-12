@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class ExecutoStepService {
+public class ExecutorStepService {
 	
 	private boolean toBeInSyncWithWallTime;
 	private int nStepsPerSec;
@@ -19,7 +19,7 @@ public class ExecutoStepService {
 	private Semaphore done;
 	private int nWorkers;
 	
-	public ExecutoStepService(AbstractSimulation sim, int nWorkers, int numSteps, Flag stopFlag, Semaphore done, boolean syncWithTime) {
+	public ExecutorStepService(AbstractSimulation sim, int nWorkers, int numSteps, Flag stopFlag, Semaphore done, boolean syncWithTime) {
 		toBeInSyncWithWallTime = false;
 		this.sim = sim;
 		this.stopFlag = stopFlag;

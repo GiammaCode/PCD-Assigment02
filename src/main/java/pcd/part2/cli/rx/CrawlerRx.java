@@ -39,7 +39,6 @@ public class CrawlerRx {
         if (depth == 0) {
             return Observable.just(new ArrayList<>());
         }
-
         return Observable.fromCallable(() -> {
             String regex = "\\b(?<=(href=\"))[^\"]*?(?=\")";
             Pattern pattern = Pattern.compile(regex);

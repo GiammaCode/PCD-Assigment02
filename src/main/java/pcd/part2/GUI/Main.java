@@ -14,7 +14,7 @@ public class Main {
         Crowler crow = new CrawlerRx();
         MyModel model = new MyModel();
         MyController controller = new MyController(model,crow);
-        MyView view = new MyView(controller,crow);
+        MyView view = new MyView(controller);
         model.addObserver(view);
         view.setVisible(true);
         new Worker(model).start();

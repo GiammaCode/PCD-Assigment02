@@ -3,6 +3,7 @@ package pcd.part2.GUI.rx;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import pcd.part2.Crowler;
+import pcd.part2.Flag;
 import pcd.part2.Report;
 
 import java.io.BufferedReader;
@@ -18,6 +19,8 @@ import java.util.regex.Pattern;
 
 public class CrawlerRx implements Crowler {
     HashMap<String, Integer> result = new HashMap<>();
+
+    Flag stopFlag= new Flag();
 
     public void getWordOccurrences(String entrypoint, String word, int depth) throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
@@ -62,7 +65,9 @@ public class CrawlerRx implements Crowler {
                     }
                 }
                 //TO DO: è un operazione critica ????
-                result.put(url,wordCount);
+                if(!stopFlag.isSet()) {
+                    result.put(url, wordCount);
+                }
                 //System.out.println(Thread.currentThread() + " analyzed: " + url + " count: " + wordCount + " depth: " + depth);
                 reader.close();
 
@@ -103,11 +108,10 @@ public class CrawlerRx implements Crowler {
 
     @Override
     public void stop() {
-
+        stopFlag.set();
     }
 
-    @Override
     public void reset() {
-
+        stopFlag.reset();
     }
 }

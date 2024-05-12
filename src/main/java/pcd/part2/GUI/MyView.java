@@ -12,7 +12,6 @@ import java.util.Map;
 public class MyView extends JFrame implements ModelObserver{
     private JTextField linkField;
     private String test = "";
-   Crowler crowler;
     private HashMap<String,Integer> result = new HashMap<>();
     private JTextField depthField;
     private JTextField wordField;
@@ -20,8 +19,7 @@ public class MyView extends JFrame implements ModelObserver{
     private JButton countButton;
     private JTextArea resultField;
 
-    public MyView(MyController controller, Crowler crowler){
-        this.crowler =crowler;
+    public MyView(MyController controller){
         setTitle("Assigment02 PCD");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -60,12 +58,12 @@ public class MyView extends JFrame implements ModelObserver{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    crowler.reset();
+                    MyController.reset();
                     String link = linkField.getText();
                     int depth = Integer.parseInt(depthField.getText());
                     String word = wordField.getText();
-                    crowler.getWordOccurrences(link,word,depth);
-                    result = crowler.getMap();
+                    MyController.getWordOccurrences(link,word,depth);
+                    result = MyController.getMap();
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -77,7 +75,7 @@ public class MyView extends JFrame implements ModelObserver{
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                crowler.stop();
+                MyController.stop();
             }
         });
         inputPanel.add(stopButton);

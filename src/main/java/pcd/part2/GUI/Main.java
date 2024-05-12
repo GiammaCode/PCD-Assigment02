@@ -9,12 +9,12 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        Crowler crow = new CrawlerVT();
+        //Crowler crow = new CrawlerVT();
         //Crowler crow = new CrawlerVertX();
-        //Crowler crow = new CrawlerRx();
+        Crowler crow = new CrawlerRx();
         MyModel model = new MyModel();
         MyController controller = new MyController(model,crow);
-        MyView view = new MyView(controller,crow);
+        MyView view = new MyView(controller);
         model.addObserver(view);
         view.setVisible(true);
         new Worker(model).start();
